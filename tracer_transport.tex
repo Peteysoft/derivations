@@ -1,0 +1,586 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+\usepackage{natbib}
+
+\bibliographystyle{apa}
+
+\begin{document}
+
+{\Large The mathematics of tracer transport}
+
+\section{Fundamentals}
+
+A trajectory is the motion in time of an infinitesimal packet of fluid
+as it is carried along by the flow:
+\begin{equation}
+\frac{\mathrm d \vec x}{\mathrm d t}=\vec v(\vec x,~t)
+\end{equation}
+where $\vec x$ is position, $t$ is time and $\vec v$ is the flow field.
+If we integrate this in time, starting at $t_0$ and ending at $t=t_0+\Delta t$, we get a
+vector function, call it, $\Phi$:
+\begin{equation}
+\vec x=\Phi(\vec x_0,~t_0,~\Delta t)
+\label{traj_def}
+\end{equation}
+where $x_0=x(t_0)$ is the Lagrangian or starting coordinate.
+Unlike in \citet{Ottino1989}, we specify the starting time explicitly instead 
+of assuming that $t_0=0$.  This convention will become useful later on, e.g., 
+when chaining functions:
+\begin{equation}
+\vec x=\Phi(\vec x_0,~\Delta t_1+\Delta t_2)=\Phi[\Phi(\vec x_0,~t_0,~\Delta t_1),~t_0 + \Delta t_1,~\Delta t_2]
+\end{equation}
+
+A flow tracer is a scalar field that follows the flow, typically a dissolved
+trace substance, but could also comprise a suspension or in fact any property
+of the fluid such as temperature or the velocity field itself.
+
+The change in the total amount of tracer in a fixed volume, $V$, is given
+by the flux plus the source term:
+\begin{equation}
+\frac{\partial}{\partial t}\int_V \rho \mathrm d \vec x=-\oint_A \rho \vec v \cdot \hat n \mathrm d A
+	+ \int_V S \mathrm d \vec x
+\end{equation}
+where $\rho$ is the density of the tracer,
+$A$ is the area enclosing $V$ and $S$ is the source term, which for the moment,
+we will take to be zero but in later analysis will 
+be needed for the diffusion term.
+From Gauss's law:
+\begin{equation}
+\int_V \frac{\partial \rho}{\partial t} \mathrm d \vec x=-\int_V \nabla \cdot (\rho \vec v)\mathrm d \vec x 
+\end{equation}
+Removing the integrals and expanding the first term on the right side:
+\begin{equation}
+\frac{\partial \rho}{\partial t} =-\vec v \cdot \nabla \rho - \rho \nabla \cdot \vec v 
+\label{mass_conservation_Eulerian}
+\end{equation}
+The first term is the advection term while the second term is the mass
+conservation term and is governed by the 
+expansion and contraction of the fluid.  In an incompressible fluid (that is,
+$\nabla \cdot \vec v = 0$), this term will be zero.
+
+To go from the Lagrangian to the Eulerian formulation, 
+we use the following equation for the {\it total derivative}:
+\begin{equation}
+\frac{\mathrm d \rho}{\mathrm d t}
+ = \frac{\partial \rho}{\partial t} + \vec v \cdot \nabla \rho
+\end{equation}
+Combining this with Equation (\ref{mass_conservation_Eulerian}):
+\begin{equation}
+\frac{\mathrm d \vec \rho}{\mathrm d t} =  - \rho \nabla \cdot \vec v
+\label{mass_conservation_Lagrangian}
+\end{equation}
+This is the Lagrangian equation for conservation of mass and governs the total density
+of the fluid, that is, fluid density is itself a flow tracer.
+
+Suppose we use a {\it mixing ratio} instead of density to track the
+tracer:
+\begin{equation}
+q = \frac {\rho}{\rho_t}
+\end{equation}
+where $\rho_t$ is the total density of the fluid.  Differentiating this wrt
+$t$ and then substituting Equation (\ref{mass_conservation_Lagrangian})
+produces the following:
+\begin{eqnarray}
+\frac{\mathrm d q}{\mathrm d t} & = & \frac{1}{\rho_t} \frac{\mathrm d \rho}{\mathrm d t}
+	- \frac{\rho}{\rho_t^2}\frac{\mathrm d \rho_t}{\mathrm d t}\\
+& = & 0
+\end{eqnarray}
+or, in Eulerian form:
+\begin{equation}
+\frac{\partial q}{\partial t} = - \vec v \cdot \nabla q
+\end{equation}
+This is the {\it advection equation}.
+
+\section{Volume deformation}
+
+\label{deformation_section}
+
+Much of this analysis can be found in \citet{Pattanayak2001} and 
+\citet{Mills2004}, however we repeat it here since I seem to end up re-deriving
+it roughly every eight months.
+
+The instantaneous rate of stretching of Lagrangian space is given by the
+gradient of the velocity, $\nabla \vec v$.
+Suppose we perturb a trajectory by a minute amount, $\delta \vec x$.
+The Tayler expansion of the time derivative is, to first order:
+\begin{equation}
+\frac{\mathrm d}{\mathrm d t} (\vec x + \delta \vec x) \approx
+	\vec v + \nabla \vec v \cdot \delta \vec x
+\end{equation}
+or:
+\begin{equation}
+\frac{\mathrm d}{\mathrm d t}\delta \vec x \approx \nabla \vec v \cdot \delta \vec x
+\label{evolution_error_vector}
+\end{equation}
+Whether we left multiply or right multiply depends on which convention we adopt
+for the application of the gradient or nabla operator, $\nabla$, to a vector,
+therefore we write it out component-by-component:
+\begin{equation}
+\nabla \vec v = \left [
+\begin{array}{ccc}
+\frac{\partial v_x}{\partial x} & \frac{\partial \vec v_x}{\partial y} & \frac{\partial \vec v_x}{\partial z} \\
+\frac{\partial v_y}{\partial x} & \frac{\partial \vec v_y}{\partial y} & \frac{\partial \vec v_y}{\partial z} \\
+\frac{\partial v_z}{\partial x} & \frac{\partial \vec v_z}{\partial y} & \frac{\partial \vec v_z}{\partial z}
+\end{array} \right ]
+\end{equation}
+where $\vec x=[x_1,~x_2,~x_3]=[x,~y,~z]$.
+
+We define $H(\vec x_0,~t_0,~\Delta t)$ as follows:
+\begin{eqnarray}
+\frac{\mathrm d H}{\mathrm d t} & = & \nabla \vec v \cdot H \\
+\label{deformation_matrix}
+H(\vec x_0,~t_0,~0) & = & I
+\end{eqnarray}
+where $I$ is the identity matrix.
+This is known as the {\it tangent model} of a dynamical system and applied
+to a trajectory is the total stretching of Lagrangian space.
+
+We can relate $H$ to the integrated trajectory, $\Phi$, as follows:
+\begin{eqnarray}
+\frac{\mathrm d \Phi}{\mathrm d t} & = & v(\Phi, ~t) \\
+\frac{\mathrm d}{\mathrm d t} 
+\nabla_{\vec x_0} \Phi & = & \nabla \vec v \cdot \nabla_{\vec x_0} \Phi
+\end{eqnarray}
+or,
+\begin{equation}
+\nabla_{\vec x_0} \Phi = H
+\label{advection_eqn}
+\end{equation}
+
+In conjunction with the equations for the evolution of error vectors, above,
+we can derive a set of corresponding equations for evolution of the tracer
+gradient.  Taking the gradient of Equation (\ref{advection_eqn}):
+\begin{equation}
+\frac{\partial}{\partial t} \nabla q = -\nabla q \cdot \nabla \vec v -
+		\vec v \cdot \nabla \nabla q 
+\end{equation}
+Meanwhile, using the total derivative:
+\begin{equation}
+\frac{\mathrm d}{\mathrm d t} \nabla q = \vec v \cdot \nabla \nabla q + 
+		\frac{\partial}{\partial t} \nabla q
+\end{equation}
+Combining the two:
+\begin{equation}
+\frac{\mathrm d}{\mathrm d t} \nabla q = -\nabla q \cdot \nabla \vec v
+\label{evolution_tracer_gradient}
+\end{equation}
+
+In parallel with $H$, we define $H^\prime$:
+\begin{eqnarray}
+\frac{\mathrm d H^\prime}{\mathrm d t} & = & -H^\prime \cdot \nabla \vec v\\
+\label{inverse_deformation_matrix}
+H^\prime(\vec x_0,~t_0,~0) & = & I
+\end{eqnarray}
+It is easy to show that:
+\begin{equation}
+H^{-1}=H^\prime
+\end{equation}
+by taking the time derivative of $H^\prime \cdot H$:
+\begin{eqnarray}
+\frac{\mathrm d}{\mathrm d t} H^\prime \cdot H & = & 
+		H^\prime \cdot \frac{\mathrm d H}{\mathrm d t} +
+		\frac{\mathrm d H^\prime}{\mathrm d t} \cdot H\\
+		& = & H^\prime \cdot \nabla \vec v \cdot H 
+		- H^\prime \cdot \nabla \vec v \cdot H \\
+		& = & 0
+\end{eqnarray}
+and that:
+\begin{equation}
+\nabla q = \nabla q_0 \cdot H^\prime
+\end{equation}
+
+Define $\Phi^{-1}(\vec x,~t,~\Delta t)$ as:
+\begin{equation}
+\Phi^{-1}[\Phi(\vec x_0,~t_0,~\Delta t),~t_0+\Delta t,~\Delta t]=\vec x_0
+\end{equation}
+Thus,
+\begin{equation}
+H^\prime=\nabla \Phi^{-1}
+\end{equation}
+
+\section{Transport map}
+
+\label{map_section}
+
+The dynamics of the tracer, $q$, can be summarized using a linear
+{\it tranpsort map}, $Q$:
+\begin{equation}
+q(\vec x,~t)=\int_V Q(\vec x_0,~\vec x,~t_0,~\Delta t) q(\vec x_0,~t_0) \mathrm d \vec x_0
+\label{tracer_map_continuous}
+\end{equation}
+In the absence of diffusion or source terms, this map can be calculated in
+at least two ways, by a differential equation: 
+\begin{eqnarray}
+\frac{\partial}{\partial t} Q & = & (\vec v \cdot \nabla) Q 
+\label{tracer_map_continuous1}\\
+Q(\vec x_0,~\vec x,~t_0,~0) & = & \delta(\vec x-\vec x_0) 
+\label{tracer_map_continuous2}
+\end{eqnarray}
+where $\delta$ is the Dirac delta function, and using the trajectory function:
+\begin{equation}
+Q(\vec x_0,~\vec x,~t_0,~\Delta t) = \delta[\Phi(\vec x_0,~t_0,~\Delta t)-x_0]
+\end{equation}
+In the latter case, combination with (\ref{tracer_map_continuous}) produces the
+Frobenius-Perron equation. \citep{Ott1993}
+
+The tracer map can be approximated by a matrix:
+\begin{equation}
+\vec q(t) = R \cdot \vec q(t_0)
+\end{equation}
+where $\vec q$ is a discrete approximation of the tracer configuration:
+$q_i = q(\vec x_i)$.  Tracer transport is fully linear and the time evolution
+of $R$ is governed by the same mathematics as $H$ and $H^\prime$:
+\begin{equation}
+\frac{\mathrm d R}{\mathrm d t} = A \cdot R
+\label{discrete_tracer_map}
+\end{equation}
+There are a number of ways to calculate $A$, the most obvious being from an 
+Eulerian finite difference scheme, which, in one dimension, would look something
+like this:
+\begin{equation}
+\frac{\mathrm d r_{ij}}{\mathrm d t} = \frac{v(x_j,~t)}{\Delta x_{j-1}+\Delta x_j} (r_{i,j+1} - r_{i,j-1})
+\end{equation}
+or,
+\begin{eqnarray}
+a_{i-1,i} & = & - \frac{v(x_i,~t)}{\Delta x_{i-1}+\Delta x_i} \\
+a_{i+1,i} & = & \frac{v(x_i,~t)}{\Delta x_{i-1}+\Delta x_i}
+\end{eqnarray}
+Neither representation shows the {\it boundary conditons}.  Typically, $A$
+will be either band diagonal or, as in the case of a semi-Lagrangian
+scheme, quite close.
+
+For simplicity, we will analysize both this system and the pair of systems
+discussed in the previous section using matrix algebra.  A more thorough
+treatment would use abstract algebra and operator theory, especially for
+the tracer map.
+
+\section{Matrix analysis of systems of linear ODEs} 
+
+\subsection{Analytic solution of the stationary case}
+
+We wish to solve the system of linear ordinary differential equations (ODEs):
+\begin{equation}
+\frac{\mathrm d \vec r}{\mathrm d t}=A \cdot \vec r
+\label{linear_ODE_system_vector_soln}
+\end{equation}
+Supposing $A$ has no time dependence, we perform an eigenvector 
+decomposion:
+\begin{equation}
+A = V^{-1} \Lambda V
+\end{equation}
+where $V$ is a matrix of eigenvectors, and $\Lambda$ is a diagonal matrix
+of eigenvalues, $\lambda_{ii}=\lambda_i$.  Thus,
+\begin{equation}
+\frac{\mathrm d}{\mathrm d t} V \cdot \vec r=\Lambda \cdot V \cdot  \vec r
+\end{equation}
+By performing the linear coordinate transformation,
+\begin{equation}
+\vec r^\prime=V \cdot \vec r
+\end{equation}
+the equation is easily solved:
+\begin{equation}
+r^\prime_i = e^{\lambda_i \Delta t} r^\prime_i(t=t_0)
+\end{equation}
+or, in the un-transformed system:
+\begin{eqnarray}
+\vec r & = & \left [V^{-1} \cdot \exp(\Delta t \Lambda) \cdot V \right ] \cdot \vec r 
+\label{solution_no_time_dependence} \\
+& \equiv & \exp(\Delta t A)\cdot \vec r
+\end{eqnarray}
+
+\subsection{Solving the time-dependent case}
+
+The stationary case is interesting, but what can it tell us about the 
+more general case in which $A$ is time-dependent?
+Here the problem is further generalized so that a matrix, $R$ 
+is used in place of the vector, $\vec r$:
+\begin{equation}
+\frac{\mathrm d \vec R}{\mathrm d t}=A(t) \cdot R
+\label{linear_ODE_system_matrix_soln}
+\end{equation}
+One of the most important properties of the solution is that it
+is decomposable as follows:
+\begin{equation}
+R(0,~t_n) = R(t_{n-1},\,\Delta t_n) \cdot R(t_{n-2},\,\Delta t_{n-1}) \cdot \, ...~~ \cdot R(t_2,\, \Delta t_3) \cdot R(t_1,\,\Delta t_2) \cdot R(0,\,\Delta t_1)
+\label{matrix_soln_decomposition}
+\end{equation}
+where $t_i=\sum_i \Delta t_i$ and we have used the convention, begun
+in Equation (\ref{traj_def}) of making $R$ a function both of the
+initial time and of the subsequent time interval.  It follows that $R(t_0, 0)=I$.
+
+Going back to Equation (\ref{linear_ODE_system_vector_soln}), we can
+see that the solution is given by a product of the initial vector with
+the matrix solution:
+\begin{equation}
+\vec r(t_0+\Delta t)=R(t_0, \Delta t) \cdot \vec r(t_0)
+\end{equation}
+
+\subsection{Negative and transposed cases}
+
+Consider the case in which the order of the factors in on the R.H.S of Equation 
+(\ref{linear_ODE_system_vector_soln}) are reversed (left-multiply vs. right-multiply):
+\begin{equation}
+\frac{\mathrm d \vec r}{\mathrm d t} = \vec r \cdot A
+\end{equation}
+This case is particularly important, since Equation (\ref{evolution_error_vector})
+when transformed in this way becomes the vorticity equation.
+
+We start with the analytic solution of the stationary case:
+\begin{eqnarray}
+A & = & V^{-1} \cdot \Lambda \cdot V \\
+\frac{\mathrm d \vec r}{\mathrm d t} & = & \vec r \cdot V^{-1} \cdot \Lambda \cdot V \\
+\frac{\mathrm d}{\mathrm d t} (\vec r \cdot V^{-1}) & = & (\vec r \cdot V^{-1}) \cdot \Lambda \\
+\vec r \cdot V^{-1} & = & \vec r_0 \cdot V^{-1} \cdot \exp (\Lambda t) \\
+\vec r & = & \vec r_0 \cdot V^{-1} \cdot \exp (\Lambda t) \cdot V 
+\end{eqnarray}
+In other words, the solution is the same, but the initial conditions are
+left-multiplied instead of right multiplied, or equivalently, the whole thing 
+could be transposed.
+
+In the time-dependent case each element of the solution is in reverse order,
+not just the initial conditions:
+\begin{equation}
+\vec r(t_n) = \vec r_0 \cdot R^*(t_0,\Delta t_0) \cdot R^*(t_1, \Delta t_1) \cdot ~ ... 
+~ \cdot R^*(t_{n-2},\Delta t_{n-2}) \cdot R^*(t_{n-1},\Delta t_{n-1})
+\end{equation}
+where $R^*$ is a solution to the equation:
+\begin{eqnarray}
+\frac{\mathrm d}{\mathrm d t}R^*(t_0,~t) & = & R^*(t_0, ~t) \cdot A(t) \\
+R^*(t_0, ~ 0) & = & I
+\end{eqnarray}
+and,
+\begin{equation}
+R^*(t,~\Delta t) \approx \exp \left [ A(t) \Delta t \right ]
+\end{equation}
+in the limit as $\Delta t \rightarrow \infty$.
+
+For the case of a negative R.H.S.:
+\begin{equation}
+\frac{\mathrm d \vec r}{\mathrm d t} = - A \cdot \vec r
+\end{equation}
+it is easy to show that the stationary solution is simply inverted:
+\begin{eqnarray}
+\vec r & = & V^{-1} \cdot \exp (-\Lambda t) \cdot V \cdot \vec r \\
+& = & V^{-1} \cdot \left [ \exp (\Lambda t) \right ]^{-1} \cdot V \cdot \vec r \\
+& = & \left [V^{-1} \cdot \exp (\Lambda t) \cdot V \right]^{-1} \cdot \vec r 
+\end{eqnarray}
+while for the time-dependent case, we have:
+\begin{equation}
+\vec r \approx R^{-1}(t_{n-1},\Delta t_{n-1}) \cdot R^{-1}(t_{n-2}, \Delta t_{n-2}) \cdot ~ ... 
+~ \cdot R^{-1}(t_1,\Delta t_1) \cdot R^{-1}(t_0,\Delta t_0) \cdot \vec r_0
+\end{equation}
+assuming that each $\Delta t_i$ is small enough that $R$ approximates the 
+stationary case.
+This provides an alternative derivation for the solution of the negative,
+transposed (left-multiplied) case which we saw already in (\ref{evolution_tracer_gradient}):
+\begin{equation}
+\frac{\mathrm d R}{\mathrm d t} = -\vec r \cdot A
+\end{equation}
+which is given by:
+\begin{eqnarray}
+\vec r(t_n) & \approx & \vec r_0 \cdot R^{-1}(t_0,\Delta t_0) \cdot R^{-1}(t_1, \Delta t_1) \cdot ~ ... 
+~ \cdot R^{-1}(t_{n-2},\Delta t_{n-2}) \cdot R^{-1}(t_{n-1},\Delta t_{n-1}) \\
+& = & \vec r_0 \cdot R^{-1}(t_0, t_n-t_0)
+\end{eqnarray}
+Where $R$ is the solution to Equation (\ref{linear_ODE_system_matrix_soln}).
+
+\subsection{Volume conservation}
+
+Since each element in (\ref{matrix_soln_decomposition}) approaches the
+non-time-dependent solution given by the first factor of 
+(\ref{solution_no_time_dependence}) in the limit as $\Delta t_i\rightarrow 0$, 
+we can use the properties of the non-time-dependent solution to
+reason about those of the time-dependent one.
+
+In many case of the problems discussed in Section \ref{deformation_section}
+and Section \ref{map_section}, the coefficient matrix, $A$, will have
+special properties that will affect the solution.
+In the solution of (\ref{deformation_matrix}) for instance, 
+$A=\nabla \vec v$ while the velocity field, $\vec v$, is frequently non-divergent,
+that is $\nabla \cdot \vec v=0$ or $\mathrm{Tr}(A)=0$.
+It can be shown (we won't show it here) that 
+if the trace of a matrix is zero, then the eigenvalues of that matrix
+sum to zero.
+
+The determinant of the solution matrix,
+$V^{-1}\cdot\exp(\Delta t\Lambda)\cdot V$, in (\ref{solution_no_time_dependence}) is:
+\begin{eqnarray}
+|V^{-1}||\exp(\Delta t\Lambda)||V| & = & \frac{1}{|V|}\prod_i \exp(\Delta t \lambda_i) |V| \\
+& = & \exp\left(\Delta t \sum_i \lambda_i\right) \\
+& = & 1
+\end{eqnarray}
+In other words, the solution, in this case, is {\it volume-conserving}:
+volumes in the space, e.g. as calculated by the determinant of a set of 
+solution vectors
+spanning the space, are conserved.  This is known as Liousville Theorem.
+
+\subsection{SVD and the Lyapunov spectrum}
+
+The singular value decomposition of a matrix is given as:
+\begin{equation}
+R=U\cdot S\cdot V^T
+\label{SVD_def}
+\end{equation}
+where $R$ is an $[m*n]$ matrix, $U$ is an $[m*n]$ ortho-normal
+matrix, $S$ is an $[n*n]$ diagonal matrix of {\it singular values}
+($s_{ii}=s_i>s_{i+1}$) and $V$ is an $[n*n]$ ortho-normal matrix.
+
+$U$ and $V^T$ are also termed the left and right {\it singular vectors}, 
+respectively and are normally calculated through eigenvalue analysis:
+\begin{eqnarray}
+R\cdot R^T \cdot U & = & U\cdot S^2 \\
+V^T \cdot R^T \cdot R & = & S^2 \cdot V^T
+\end{eqnarray}
+Typically, only one of $U$ or $V$ is calculated and then the other by projection
+onto $R$.  Which one is calculated first is best determined by whether $m$
+is greater than or less than $n$.  Equation (\ref{SVD_def}) assumes that 
+$m>n$.
+
+Assuming that $R$ is an integrated tangent model as in 
+(\ref{deformation_matrix}), (\ref{inverse_deformation_matrix})
+and (\ref{discrete_tracer_map}), 
+the Lyapunov exponents are defined as the time averages of the logarithms
+of the singular values in the limit as time goes to infinity:
+\begin{equation}
+\lambda_i=\lim_{\Delta t \rightarrow 0} \frac{1}{\Delta t} \log s_i
+\end{equation}
+
+If the tangent model is volume conserving, then the Lyapunov exponents, like
+the eigenvalues, will sum to zero.
+
+\subsection{Other properties}
+
+Suppose $R$ has the property that it preserves lengths when applied to
+a vector:
+\begin{equation}
+|R\cdot \vec q| = |\vec q|
+\end{equation}
+thus the rate of change of the vector will always be perpendicular:
+\begin{eqnarray}
+\frac{\mathrm d}{\mathrm d t}|\vec q| & = & 
+	\nabla |\vec q| \cdot \frac{\mathrm d \vec q}{\mathrm d t} \\
+	&=& \frac{\vec q}{|\vec q|} \cdot A \cdot \vec q \\
+	&=& 0 \\
+	\vec q \cdot A \cdot \vec q & = & 0 
+\end{eqnarray}
+$A$ is what we shall call an ``orthogonality transform''.
+By separating the diagonal and off-diagonal components in the last expression,
+\begin{equation}
+\sum_i \sum_j a_{ij} q_i q_j = \sum_{i=1}^n a_{ii}q_i^2 + \sum_{i=1}^n \sum_{j=i+1}^n (a_{ij} q_i q_j + a_{ji} q_i q_j) = 0
+\end{equation}
+we can show that it has the following
+properties:
+\begin{eqnarray}
+a_{ii} & = & 0 \\
+a_{ij}+a_{ji} & = & 0
+\end{eqnarray}
+
+Meanwhile, $R$ is a rotation.  All the singular values of $R$ will be 1:
+\begin{eqnarray}
+\vec q \cdot R^T \cdot R \cdot \vec q & = & \vec q \cdot \vec q\\
+R^T \cdot R \cdot \vec q & = & \vec q
+\end{eqnarray}
+Because it is a rotation, it will be orthonormal with a determinant of 1
+and ones for all the eigenvalues.
+
+The tracer mapping, $Q$, as defined in 
+(\ref{tracer_map_continuous1}) and (\ref{tracer_map_continuous2}),
+that is, without diffusion, will fulfill these properties.  Discrete mappings
+can only approximate them and by necessity always include some diffusion.
+
+A more important property of tracer advection is that the total substance
+remains constant, thus:
+\begin{eqnarray}
+\sum_i q_i & = & const. \\
+\frac{\mathrm d}{\mathrm d t}\sum_i q_i & = & 0
+\end{eqnarray}
+This will be true even if $q$ is measured as a mixing ratio, provided that
+the flow is non-divergent.  Most flows in real fluids are approximately 
+non-divergent, especially when considered over long time scales.
+Continuing the derivation:
+\begin{eqnarray}
+\sum_i \sum_j r_{ij} q_j & = & \sum_j q_j \\
+\sum_j q_j \left ( \sum_i r_{ij} - 1 \right ) & = & 0 \\
+\end{eqnarray}
+and:
+\begin{eqnarray}
+\sum_i \frac{\mathrm d q_i}{\mathrm d t} & = & 0 \\
+\sum_i \sum_j a_{ij} q_j & = & 0 \\
+\sum_j q_j \sum_i a_{ij} & = & 0 
+\end{eqnarray}
+Therefore:
+\begin{eqnarray}
+\sum_i q_{ij} & = & 1 \\
+\sum_i a_{ij} & = & 0
+\end{eqnarray}
+[Problem: show that the second property implies the first using an eigenvalue
+solution for an A with no time dependence.]
+
+As pointed out already, a discrete tracer mapping will always require some 
+amount of diffusion.  This means that the tracer configuration will 
+tend towards a uniform distribution over time, 
+that is, it will "flatten out."  We can
+show that, given the above constraint, a tracer field with all the same values
+ has the smallest magnitude.  Suppose there are only two elements in the 
+tracer vector, $\vec q=\lbrace q,~q \rbrace$.  The magnitude of the vector is:
+\begin{equation}
+|\vec q|=\sqrt{q^2+q^2}=\sqrt{2} q^2
+\end{equation}
+Now we introduce a separation between the elements, $2\Delta q$, that 
+nonetheless keeps the sum of the elements constant:
+\begin{eqnarray}
+|q+\Delta q,~q-\Delta q| & = & \sqrt{(q+\Delta q)^2+(q-\Delta q)^2} \\
+& = & \sqrt{2}\sqrt{q^2+(\Delta q)^2} \ge \sqrt{2} q^2
+\end{eqnarray}
+This will generalize to higher-dimensional vectors.  In general, we can
+say that:
+\begin{equation}
+\vec q \cdot R^T \cdot R \cdot \vec q \le \vec q \cdot \vec q
+\label{tracer_map_inequality}
+\end{equation}
+Implying that for the eigenvalue problem,
+\begin{eqnarray}
+R^T \cdot R \cdot \vec q & = & s \vec q \nonumber\\
+|s| & \le & 1 \label{SV_inequality}
+\end{eqnarray}
+otherwise (\ref{tracer_map_inequality}) would not hold.
+Since the tracer field is always positive, $s$ will also be positive.
+Tracer distributions are mathematically equivalent to probabilities, 
+with the tracer
+mapping having the properties of a conditional probability.
+
+Equation (\ref{SV_inequality}) implies that the Lyapunov exponents are all
+either zero or negative with the largest equal to 0.  This has been shown
+experimentally in \citet{Mills2012}.
+
+\section{Adding sources and sinks}
+
+We wish to add a source term, $\vec \sigma$, to the matrix tracer model
+described in the previous two sections:
+\begin{equation}
+\frac{\mathrm d R}{\mathrm d t} = A(t) \cdot R + \vec \sigma(t)
+\end{equation}
+Integrating to a discrete approximation:
+\begin{eqnarray}
+\vec q(t_n) & = R(t_{n-1}, \Delta t_{n-1}) \cdot [\Delta t_{n-1}\vec \sigma(t_{n-1})+R(t_{n-1}, \Delta t_{n-2}) 
+\cdot [\Delta t_{n-2} \vec \sigma(t_{n-2})+~...\nonumber \\
+& R(t_2, \Delta t_2) \cdot [\Delta t_2 \vec \sigma(t_2) +
+R(t_1, \Delta t_1) \cdot [\Delta t_1 \vec \sigma(t_1) + R(t_0, \Delta t_0) \cdot q(t_0) ]]...]]
+\end{eqnarray}
+and multiplying through:
+\begin{eqnarray}
+\vec q(t_n) & = & R(t_0,t_n-t_0) \cdot \vec q(t_0) + \Delta t_1 R(t_1,t_n-t_1) \cdot \vec \sigma(t_1) +
+\Delta t_2 R(t_2, t_n-t_2) \cdot \sigma(t_2) + ~...\nonumber \\ 
+& & + \Delta t_{n-2} R(t_{n-2},t_n-t_{n-2}) \cdot \vec\sigma(t_{n-2}) + 
+\Delta t_{n-1} R(t_{n-1},\Delta t_{n-1}) \cdot \vec \sigma(t_{n-1})
+\end{eqnarray}
+
+
+\bibliography{tracer.bib}
+
+\end{document}
+
+
+
