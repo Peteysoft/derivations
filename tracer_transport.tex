@@ -241,6 +241,7 @@ Eulerian finite difference scheme, which, in one dimension, would look something
 like this:
 \begin{equation}
 \frac{\mathrm d r_{ij}}{\mathrm d t} = \frac{v(x_j,~t)}{\Delta x_{j-1}+\Delta x_j} (r_{i,j+1} - r_{i,j-1})
+\label{simple_finite_difference}
 \end{equation}
 or,
 \begin{eqnarray}
@@ -317,7 +318,7 @@ the matrix solution:
 \vec r(t_0+\Delta t)=R(t_0, \Delta t) \cdot \vec r(t_0)
 \end{equation}
 
-\subsection{Negative and transposed cases}
+\subsection{Negative and left-multiplied cases}
 
 Consider the case in which the order of the factors in on the R.H.S of Equation 
 (\ref{linear_ODE_system_vector_soln}) are reversed (left-multiply vs. right-multiply):
@@ -512,7 +513,8 @@ and:
 \end{eqnarray}
 Therefore:
 \begin{eqnarray}
-\sum_i q_{ij} & = & 1 \\
+\sum_i r_{ij} & = & 1 
+\label{column_sums_to_one}\\
 \sum_i a_{ij} & = & 0
 \end{eqnarray}
 [Problem: show that the second property implies the first using an eigenvalue
@@ -547,13 +549,88 @@ R^T \cdot R \cdot \vec q & = & s \vec q \nonumber\\
 \end{eqnarray}
 otherwise (\ref{tracer_map_inequality}) would not hold.
 Since the tracer field is always positive, $s$ will also be positive.
-Tracer distributions are mathematically equivalent to probabilities, 
-with the tracer
-mapping having the properties of a conditional probability.
-
 Equation (\ref{SV_inequality}) implies that the Lyapunov exponents are all
 either zero or negative with the largest equal to 0.  This has been shown
-experimentally in \citet{Mills2012}.
+numerically in \citet{Mills2012}.
+
+\section{Practical considerations}
+
+The traditional method of testing Eulerian tracer simulations for stability
+is von Neumann analysis.
+Equation (\ref{simple_finite_difference}) provides a simple, finite
+difference method for
+calculating the evolution matrix, $A$, for an Eulerian tracer simulation.
+Assuming we've obeyed the Courant-Friedrich-Levy (CFL) criterion for choosing
+the time-step (which itself is derived from von Neumann analysis), von Neumann
+analysis shows this method to be unconditionally stable.
+
+In fact the method is quite naive and if applied to any real fluid flow would 
+quickly overflow.
+This is because shear flows and mixing cause the tracer gradient to grow without bound.
+To fix this, some amount of diffusion must be added.  Here is the 
+{\it advection-diffusion} equation:
+\begin{equation}
+\frac{\partial q}{\partial t} = - \vec v \cdot \nabla q + \nabla \cdot D \cdot \nabla q
+\end{equation}
+where $D$ is the diffusivity tensor.
+Here is its translation, in one dimension, to a second-order, centred,
+finite-difference equation:
+\begin{eqnarray}
+\frac{\partial q_i}{\partial t} & = & \frac{v(q_{i+1} - q_{i-1})}{2 \Delta x} +
+	\frac{d (q_{i-1} + q_{i+1} - 2 q_i}{\Delta x^2} \\
+& = & \left (- \frac{v}{2 \Delta x} + \frac{d}{\Delta x^2} \right ) q_{i-1} -
+	\frac{2 d}{\Delta x^2} q_i + 
+	\left (\frac{v}{2 \Delta x} + \frac{d}{\Delta x^2} \right ) q_{i+1}
+\end{eqnarray}
+where $d$ is a scalar diffusion coefficient.
+Expressed as elements of a matrix:
+\begin{eqnarray}
+a_{i,i-1} & = & \left (- \frac{v}{2 \Delta x} + \frac{d}{\Delta x^2} \right ) \\
+a_{i,i} & = & \frac{2 d}{\Delta x^2} \\
+a_{i,i+1} & = & \left (\frac{v}{2 \Delta x} + \frac{d}{\Delta x^2} \right )
+\end{eqnarray}
+In order to prevent the simulation from overflowing, $d$ will have to be tuned.
+Generalization to two or more dimensions is straightforward.
+Since the simulation is discrete, the actual order of these points in the
+vector or matrix is arbitrary.
+
+Semi-Lagrangian methods perform a back-trajectory from each of the Eulerian
+points in the simulation, then interpolate the new value.  Instead of doing
+this directly, the interpolation coefficients are stored directly, not in
+the evolution matrix, $A$, but rather in a transport matrix, $R(t_i,~\Delta t_i)$.
+Each Eulerian time-step produces one element in the decomposition of a
+larger transport matrix $R(t_0,~t_n-t_0)$.
+
+Semi-Lagrangian methods are unconditionally stable and not subject to the
+CFL criterion.
+Both the final transport map, and each member of its decomposition will have
+the following properties:
+\begin{itemize}
+\item every element is between 0 and 1:
+\begin{equation}
+0 \le r_{ij} \le 1
+\label{element_on_unit_interval}
+\end{equation}
+\item rows sum to 1:
+\begin{equation}
+\sum_j r_{ij} = 1
+\end{equation}
+\end{itemize}
+In addition, we can approximate the evolution matrix:
+\begin{equation}
+A(t_i+\Delta t/2}) \approx \frac{1}{\Delta t} (R(t_i,~\Delta t) - I)
+\end{equation}
+
+\subsection{Criteria for stability}
+
+If the transport map, $R$, satisfies both Equation (\ref{column_sums_to_one})
+and the inequality in (\ref{element_on_unit_interval}) then it is mathematically
+equivalent to a conditional probability.
+In addition, if we normalize the tracer such that $\sum_i q_i=1$
+then it too is equivalent to a probability.
+
+The criterion for a diffusive simulation can be translated
+
 
 \section{Adding sources and sinks}
 
