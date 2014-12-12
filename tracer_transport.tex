@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 
 \usepackage{amsmath}
 \usepackage[dvips]{graphicx}
@@ -8,7 +8,11 @@
 
 \begin{document}
 
-{\Large The mathematics of tracer transport}
+{\Large MATRIX ANALYSIS OF TRACER TRANSPORT}
+
+\tableofcontents
+
+\section{Introduction}
 
 \section{Fundamentals}
 
@@ -46,7 +50,7 @@ where $\rho$ is the density of the tracer,
 $A$ is the area enclosing $V$ and $S$ is the source term, which for the moment,
 we will take to be zero but in later analysis will 
 be needed for the diffusion term.
-From Gauss's law:
+From divergence theorem:
 \begin{equation}
 \int_V \frac{\partial \rho}{\partial t} \mathrm d \vec x=-\int_V \nabla \cdot (\rho \vec v)\mathrm d \vec x 
 \end{equation}
@@ -60,7 +64,7 @@ conservation term and is governed by the
 expansion and contraction of the fluid.  In an incompressible fluid (that is,
 $\nabla \cdot \vec v = 0$), this term will be zero.
 
-To go from the Lagrangian to the Eulerian formulation, 
+To go from the {\it Lagrangian} to the {\it Eulerian formulation}, 
 we use the following equation for the {\it total derivative}:
 \begin{equation}
 \frac{\mathrm d \rho}{\mathrm d t}
@@ -97,10 +101,10 @@ This is the {\it advection equation}.
 
 \label{deformation_section}
 
-Much of this analysis can be found in \citet{Pattanayak2001} and 
-\citet{Mills2004}, however we repeat it here since I seem to end up re-deriving
-it roughly every eight months.
-
+Most of this analysis can be found in \citet{Pattanayak2001} and 
+\citet{Mills2004}. 
+%however we repeat it here since I seem to end up re-deriving
+%it roughly every eight months.
 The instantaneous rate of stretching of Lagrangian space is given by the
 gradient of the velocity, $\nabla \vec v$.
 Suppose we perturb a trajectory by a minute amount, $\delta \vec x$.
@@ -150,7 +154,7 @@ or,
 \end{equation}
 
 In conjunction with the equations for the evolution of error vectors, above,
-we can derive a set of corresponding equations for evolution of the tracer
+we can derive a set of corresponding equations for the evolution of the tracer
 gradient.  Taking the gradient of Equation (\ref{advection_eqn}):
 \begin{equation}
 \frac{\partial}{\partial t} \nabla q = -\nabla q \cdot \nabla \vec v -
@@ -257,7 +261,7 @@ discussed in the previous section using matrix algebra.  A more thorough
 treatment would use abstract algebra and operator theory, especially for
 the tracer map.
 
-\section{Matrix analysis of systems of linear ODEs} 
+\section{Matrix solution of systems of linear ODEs} 
 
 \subsection{Analytic solution of the stationary case}
 
@@ -295,20 +299,26 @@ where $\vec r_0=\vec r(t_0)$.
 \subsection{Solving the time-dependent case}
 
 The stationary case is interesting, but what can it tell us about the 
-more general case in which $A$ is time-dependent?
+more general case in which $A$, which we'll call the {\it evolution matrix},
+is time-dependent?
 Here the problem is further generalized so that a matrix, $R$ 
 is used in place of the vector, $\vec r$:
 \begin{equation}
-\frac{\mathrm d \vec R}{\mathrm d t}=A(t) \cdot R
+\frac{\mathrm d R}{\mathrm d t}=A(t) \cdot R
 \label{linear_ODE_system_matrix_soln}
 \end{equation}
 One of the most important properties of the solution is that it
 is decomposable as follows:
 \begin{equation}
-R(0,~t_n) = R(t_{n-1},\,\Delta t_n) \cdot R(t_{n-2},\,\Delta t_{n-1}) \cdot \, ...~~ \cdot R(t_2,\, \Delta t_3) \cdot R(t_1,\,\Delta t_2) \cdot R(0,\,\Delta t_1)
+R(t_0,~t_n-t_0) = R(t_{n-1},\,\Delta t_{n-1}) \cdot R(t_{n-2},\,\Delta t_{n-2}) \cdot \, ...~~ 
+	\cdot R(t_2,\, \Delta t_2) \cdot R(t_1,\,\Delta t_1) \cdot R(t_0,\,\Delta t_0)
 \label{matrix_soln_decomposition}
 \end{equation}
-where $t_i=\sum_i \Delta t_i$ and we have used the convention, begun
+where,
+\begin{equation}
+t_n=t_0+\sum_{i=0}^{n-1} \Delta t_i
+\end{equation}
+and we have used the convention, begun
 in Equation (\ref{traj_def}) of making $R$ a function both of the
 initial time and of the subsequent time interval.  It follows that $R(t_0, 0)=I$.
 
@@ -319,9 +329,16 @@ the matrix solution:
 \vec r(t_0+\Delta t)=R(t_0, \Delta t) \cdot \vec r(t_0)
 \end{equation}
 
+It stands to reason that each element in the decomposition in (\ref{matrix_soln_decomposition})
+may be approximated by the stationary solution in the limit as the time step
+approaches zero:
+\begin{equation}
+R(t, ~ \Delta t \rightarrow 0) = \exp \left [ A(t) \Delta t \right ]
+\end{equation}
+
 \subsection{Negative and left-multiplied cases}
 
-Consider the case in which the order of the factors in on the R.H.S of Equation 
+Consider the case in which the order of the factors on the R.H.S of Equation 
 (\ref{linear_ODE_system_vector_soln}) are reversed (left-multiply vs. right-multiply):
 \begin{equation}
 \frac{\mathrm d \vec r}{\mathrm d t} = \vec r \cdot A
@@ -354,9 +371,9 @@ R^*(t_0, ~ 0) & = & I
 \end{eqnarray}
 and,
 \begin{equation}
-R^*(t,~\Delta t) \approx \exp \left [ A(t) \Delta t \right ]
+R^*(t,~\Delta t \rightarrow 0) = R(t,~ \Delta t ) 
+ = \exp \left [ A(t) \Delta t \right ]
 \end{equation}
-in the limit as $\Delta t \rightarrow \infty$.
 
 For the case of a negative R.H.S.:
 \begin{equation}
@@ -383,42 +400,13 @@ transposed (left-multiplied) case which we saw already in (\ref{evolution_tracer
 which is given by:
 \begin{eqnarray}
 \vec r(t_n) & \approx & \vec r_0 \cdot R^{-1}(t_0,\Delta t_0) \cdot R^{-1}(t_1, \Delta t_1) \cdot ~ ... 
-~ \cdot R^{-1}(t_{n-2},\Delta t_{n-2}) \cdot R^{-1}(t_{n-1},\Delta t_{n-1}) \\
+~ \nonumber \\
+& & ~~~~~~~...~\cdot R^{-1}(t_{n-2},\Delta t_{n-2}) \cdot R^{-1}(t_{n-1},\Delta t_{n-1}) \\
 & = & \vec r_0 \cdot R^{-1}(t_0, t_n-t_0)
 \end{eqnarray}
 Where $R$ is the solution to Equation (\ref{linear_ODE_system_matrix_soln}).
 
-\subsection{Volume conservation}
-
-Since each element in (\ref{matrix_soln_decomposition}) approaches the
-non-time-dependent solution given by the first factor of 
-(\ref{solution_no_time_dependence}) in the limit as $\Delta t_i\rightarrow 0$, 
-we can use the properties of the non-time-dependent solution to
-reason about those of the time-dependent one.
-
-In many case of the problems discussed in Section \ref{deformation_section}
-and Section \ref{map_section}, the coefficient matrix, $A$, will have
-special properties that will affect the solution.
-In the solution of (\ref{deformation_matrix}) for instance, 
-$A=\nabla \vec v$ while the velocity field, $\vec v$, is frequently non-divergent,
-that is $\nabla \cdot \vec v=0$ or $\mathrm{Tr}(A)=0$.
-It can be shown (we won't show it here) that 
-if the trace of a matrix is zero, then the eigenvalues of that matrix
-sum to zero.
-
-The determinant of the solution matrix,
-$V^{-1}\cdot\exp(\Delta t\Lambda)\cdot V$, in (\ref{solution_no_time_dependence}) is:
-\begin{eqnarray}
-|V^{-1}||\exp(\Delta t\Lambda)||V| & = & \frac{1}{|V|}\prod_i \exp(\Delta t \lambda_i) |V| \\
-& = & \exp\left(\Delta t \sum_i \lambda_i\right) \\
-& = & 1
-\end{eqnarray}
-In other words, the solution, in this case, is {\it volume-conserving}:
-volumes in the space, e.g. as calculated by the determinant of a set of 
-solution vectors
-spanning the space, are conserved.  This is known as Liousville Theorem.
-
-\subsection{SVD and the Lyapunov spectrum}
+\section{SVD and the Lyapunov spectrum}
 
 The singular value decomposition of a matrix is given as:
 \begin{equation}
@@ -449,10 +437,59 @@ of the singular values in the limit as time goes to infinity:
 \lambda_i=\lim_{\Delta t \rightarrow 0} \frac{1}{\Delta t} \log s_i
 \end{equation}
 
-If the tangent model is volume conserving, then the Lyapunov exponents, like
-the eigenvalues, will sum to zero.
+If there is any significant difference between the largest and next largest
+Lyapunov exonents, the largest singular value will come to dominate the matrix
+as it evolves forward in time.  Thus:
+\begin{equation}
+r_i(t \rightarrow \infty) = \sum_j u_{i1} s_1 v_{1j} r_j(t_0)
+\end{equation}
+and:
+\begin{equation}
+|\vec r(t \rightarrow \infty)| = |\vec r_0| e^{\lambda_1 \Delta t}
+\label{large_Lyap}
+\end{equation}
+The Lyapunov exponent is often somewhat incorrectly defined as
+(\ref{large_Lyap}) above.
 
-\subsection{Other properties}
+\section{Special properties}
+
+Since each element in (\ref{matrix_soln_decomposition}) approaches the
+non-time-dependent solution given by the first factor of 
+(\ref{solution_no_time_dependence}) in the limit as $\Delta t_i\rightarrow 0$, 
+we can use the properties of the non-time-dependent solution to
+reason about those of the time-dependent one.
+In many case of the problems discussed in Section \ref{deformation_section}
+and Section \ref{map_section}, the evolution matrix, $A$, will have
+special properties that will affect the solution.
+
+\subsection{Volume conservation}
+
+In the solution of (\ref{deformation_matrix}) for instance, 
+$A=\nabla \vec v$ while the velocity field, $\vec v$, is frequently non-divergent,
+that is $\nabla \cdot \vec v=0$ or $\mathrm{Tr}(A)=0$.
+It can be shown (we won't show it here) that 
+if the trace of a matrix is zero, then the eigenvalues of that matrix
+sum to zero.
+
+The determinant of the stationary solution matrix,
+$V^{-1}\cdot\exp(\Delta t\Lambda)\cdot V$, in (\ref{solution_no_time_dependence}) is:
+\begin{eqnarray}
+|V^{-1}||\exp(\Delta t\Lambda)||V| & = & \frac{1}{|V|}\prod_i \exp(\Delta t \lambda_i) |V| \\
+& = & \exp\left(\Delta t \sum_i \lambda_i\right) \\
+& = & 1
+\end{eqnarray}
+In other words, the solution, in this case, is {\it volume-conserving}:
+volumes in the space, e.g. as calculated by the determinant of a set of 
+solution vectors
+spanning the space, are conserved.  
+This is known as Liousville Theorem \cite{Thornton2003}.
+
+The result generalizes not only to the time-dependent case, but
+also to the Lyapunov exponents, which, like the eigenvalues, will sum to
+zero.
+
+
+\subsection{Mass and length conservation}
 
 Suppose $R$ has the property that it preserves lengths when applied to
 a vector:
@@ -525,7 +562,7 @@ solution for an A with no time dependence.]
 As pointed out already, a discrete tracer mapping will always require some 
 amount of diffusion.  This means that the tracer configuration will 
 tend towards a uniform distribution over time, 
-that is, it will "flatten out."  We can
+that is, it will ``flatten out.''  We can
 show that, given the above constraint, a tracer field with all the same values
  has the smallest magnitude.  Suppose there are only two elements in the 
 tracer vector, $\vec q=\lbrace q,~q \rbrace$.  The magnitude of the vector is:
@@ -562,7 +599,7 @@ is von Neumann analysis.
 Equation (\ref{simple_finite_difference}) provides a simple, finite
 difference method for
 calculating the evolution matrix, $A$, for an Eulerian tracer simulation.
-Assuming we've obeyed the Courant-Friedrich-Levy (CFL) criterion for choosing
+Assuming we've obeyed the Courant-Friedrichs-Lewy (CFL) criterion for choosing
 the time-step (which itself is derived from von Neumann analysis), von Neumann
 analysis shows this method to be unconditionally stable.
 
@@ -576,7 +613,7 @@ To fix this, some amount of diffusion must be added.  Here is the
 \end{equation}
 where $D$ is the diffusivity tensor.
 Here is its translation, in one dimension, to a second-order, centred,
-finite-difference equation:
+finite-difference equation with uniform spatial grids:
 \begin{eqnarray}
 \frac{\partial q_i}{\partial t} & = & \frac{v(q_{i+1} - q_{i-1})}{2 \Delta x} +
 	\frac{d (q_{i-1} + q_{i+1} - 2 q_i}{\Delta x^2} \\
@@ -600,7 +637,7 @@ Semi-Lagrangian methods perform a back-trajectory from each of the Eulerian
 points in the simulation, then interpolate the new value.  Instead of doing
 this directly, the interpolation coefficients are stored directly, not in
 the evolution matrix, $A$, but rather in a transport matrix, $R(t_i,~\Delta t_i)$.
-Each Eulerian time-step produces one element in the decomposition of a
+Each Eulerian time-step produces one element in the decomposition of the
 larger transport matrix $R(t_0,~t_n-t_0)$.
 
 Semi-Lagrangian methods are unconditionally stable and not subject to the
@@ -619,7 +656,8 @@ the following properties:
 \end{equation}
 \end{itemize}
 The first condition holds for linear interpolation methods which will have
-$2^N$ non-zero elements per row, where $N$ is the number of dimensions. 
+a maximum of $2^N$ non-zero elements per row, 
+where $N$ is the number of dimensions. 
 Some kernel-smoothing methods include negative coefficients.
 
 In addition, we can approximate the evolution matrix to second order:
@@ -641,7 +679,7 @@ we arrive at a pair of criteria for the evolution matrix:
 a_{ii} & \le & 0 \\
 a_{ij}+a_{ji} & \le & 0
 \end{eqnarray}
-in agreement with our definition of a diffusive tracer map in
+in agreement with our definition of a strictly diffusive tracer map in
 (\ref{tracer_map_inequality}).
 
 
@@ -650,18 +688,18 @@ in agreement with our definition of a diffusive tracer map in
 We wish to add a source term, $\vec \sigma$, to the matrix tracer model
 described in the previous two sections:
 \begin{equation}
-\frac{\mathrm d R}{\mathrm d t} = A(t) \cdot R + \vec \sigma(t)
+\frac{\mathrm d \vec q}{\mathrm d t} = A(t) \cdot \vec q + \vec \sigma(t)
 \end{equation}
 Integrating to a discrete approximation:
 \begin{eqnarray}
-\vec q(t_n) & = R(t_{n-1}, \Delta t_{n-1}) \cdot [\Delta t_{n-1}\vec \sigma(t_{n-1})+R(t_{n-1}, \Delta t_{n-2}) 
+\vec q(t_n) & \approx R(t_{n-1}, \Delta t_{n-1}) \cdot [\Delta t_{n-1}\vec \sigma(t_{n-1})+R(t_{n-1}, \Delta t_{n-2}) 
 \cdot [\Delta t_{n-2} \vec \sigma(t_{n-2})+~...\nonumber \\
 & R(t_2, \Delta t_2) \cdot [\Delta t_2 \vec \sigma(t_2) +
 R(t_1, \Delta t_1) \cdot [\Delta t_1 \vec \sigma(t_1) + R(t_0, \Delta t_0) \cdot q(t_0) ]]...]]
 \end{eqnarray}
 and multiplying through:
 \begin{eqnarray}
-\vec q(t_n) & = & R(t_0,t_n-t_0) \cdot \vec q(t_0) + \Delta t_1 R(t_1,t_n-t_1) \cdot \vec \sigma(t_1) +
+\vec q(t_n) & \approx & R(t_0,t_n-t_0) \cdot \vec q(t_0) + \Delta t_1 R(t_1,t_n-t_1) \cdot \vec \sigma(t_1) +
 \Delta t_2 R(t_2, t_n-t_2) \cdot \sigma(t_2) + ~...\nonumber \\ 
 & & + \Delta t_{n-2} R(t_{n-2},t_n-t_{n-2}) \cdot \vec\sigma(t_{n-2}) + 
 \Delta t_{n-1} R(t_{n-1},\Delta t_{n-1}) \cdot \vec \sigma(t_{n-1})
