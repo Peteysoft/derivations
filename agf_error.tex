@@ -1,0 +1,146 @@
+\documentclass[11pt]{article}
+
+\begin{document}
+
+Given a set of samples, $\lbrace \vec x_i \rbrace$, 
+obeying some probability distribution, $P$, we can estimate the
+density of samples at a test point, $\vec x$, by weighting the samples
+according to distance using a symmetric filter function and dividing
+by the normalization coefficient of the function:
+\begin{eqnarray}
+  w_i & = & f(|\vec x_i -\vec x|) \\
+  W & = & \sum_i w_i \\
+  \overline P(\vec x) & = & \frac{W}{Nn}
+  \label{approx_P}
+\end{eqnarray}
+where $\overline P$ is the estimated density, which
+should approximate the actual distribution, $P$,
+$f$ is the filter function, $n$ is the number of samples
+and $N$ is the normalization coefficient:
+\begin{equation}
+  N=\int_A f(|\vec x - \vec y|)dy
+\end{equation}
+Using a Gaussian for $f$:
+\begin{equation}
+  f(r)=e^{-\frac{r^2}{2\sigma^2}}
+\end{equation}
+where $\sigma$ is the filter function.  Then:
+\begin{equation}
+  N=(2\pi)^{D/2}\sigma^D
+  \label{N_def}
+\end{equation}
+where $D$ is the number of dimensions.
+
+We wish to derive an error confidence for this estimate.
+Suppose we approximate the PDF using a third-order Taylor series:
+\begin{equation}
+  \tilde P(\vec x) = P(\vec x_0) + \nabla P(\vec x_0) \cdot (\vec x-\vec x_0)
+	+(\vec x-\vec x_0) \cdot \nabla \nabla P \cdot (\vec x - \vec x_0)
+  \label{P_Taylor}
+\end{equation}
+In the continuum limit, the summation in (\ref{approx_P}) 
+will be given by an integral, which we apply to (\ref{P_Taylor}):
+\begin{eqnarray}
+  \overline P(\vec x) & \approx & \frac{1}{Nn}\int f(\vec x) \tilde P(\vec x) d \vec x\\
+   & = & \frac{1}{N} \left [ \int f(\vec x) P(\vec x_o)d\vec x + 
+		\int f(\vec x) \nabla P \cdot (\vec x-\vec x_0) d\vec x +
+		\int f(\vec x) (\vec x-\vec x_0) \cdot \nabla \nabla P \cdot
+		(\vec x - \vec x_0) d\vec x \right ]
+  \label{P_bar_cont}
+\end{eqnarray}
+We wish to find the error in $\overline P$, centred at $\vec x_0$:
+\begin{equation}
+e_1 = \overline P(\vec x_0) - P(\vec x_0)
+\end{equation}
+By symmetry, $P$ will cancel the first term in (\ref{P_bar_cont}), while the
+second term will be zero, which leaves:
+\begin{equation}
+  e_1 = \frac{1}{Nn} \int f(\vec x)(\vec x-\vec x_0) \cdot \nabla \nabla P \cdot (\vec x-\vec x_0) d\vec x
+\end{equation}
+Let:
+\begin{equation}
+A = \nabla \nabla P
+\end{equation}
+or:
+\begin{equation}
+a_{ij} = \frac{\partial^2 P}{\partial x_i \partial x_j} (\vec x_0)
+\end{equation}
+Also, we set $x_0=0$ since it simplifies the analysis but does not change
+the basic result.  Writing the matrix multiplication using summation notation:
+\begin{eqnarray}
+  e_1 & = & \frac{1}{Nn} \int f(\vec x) \vec x \cdot A \cdot \vec x d\vec x \\
+	& = & \frac{1}{Nn} \int f(\vec x) \sum_{i, j} x_i x_j a_{ij} d\vec x \\
+	& = & \frac{1}{Nn} \sum_{i, j} \int f(\vec x) x_i x_j a_{ij} d\vec x
+\end{eqnarray}
+Note:
+\begin{eqnarray}
+  f(\vec x) & = & \exp \left ( -\frac{\sum_i x_i^2}{2 \sigma^2} \right ) \\
+	& = & \prod_i \exp \left ( -\frac{x_i^2}{2 \sigma^2} \right )
+\end{eqnarray}
+Thus, we can divide the integral into a summation of $n^2$ separable integrals.
+The off diagonal terms, where $i \ne j$, will be given as follows:
+\begin{equation}
+  \int f(\vec x) x_i x_j a_{ij} d\vec x = 
+	a{ij} \frac{\prod_k \int \exp \left (-\frac{x_k^2}{2\sigma^2} \right ) dx_k}
+	{\int \exp \left (-\frac{x_i^2}{2\sigma^2} \right ) dx_i
+	\int \exp \left (-\frac{x_j^2}{2\sigma^2} \right ) dx_j}
+	\int x_i \exp \left (-\frac{x_i^2}{2\sigma^2} \right ) dx_i
+	\int x_j \exp \left (-\frac{x_j^2}{2\sigma^2} \right ) dx_j
+\end{equation}
+Since:
+\begin{equation}
+  \int x \exp \left (-\frac{x^2}{2\sigma^2} \right ) dx 
+	= \left [\sigma^2 \exp \left (-\frac{x^2}{2\sigma^2} \right ) \right ]_{-\infty}^\infty
+	= 0
+\end{equation}
+They will evaluate to zero, which leaves only the diagonals, $i=j$.  
+These will be given as follows:
+\begin{equation}
+  \int f(\vec x) x_i^2 a_{ii} d\vec x =  
+	a_{ii} \frac{\prod_k \int \exp \left (-\frac{x_k^2}{2\sigma^2} \right ) dx_k}
+        {\int \exp \left (-\frac{x_i^2}{2\sigma^2} \right ) dx_i}
+        \int x_i^2 \exp \left (-\frac{x_i^2}{2\sigma^2} \right ) dx_i
+\end{equation}
+Once the integral has been separated, the subscript is actually redundant,
+thus:
+\begin{equation}
+  \int f(\vec x) x_i^2 a_{ii} d\vec x =  
+	a_{ii} \frac{ \left [ \int \exp \left (-\frac{x^2}{2\sigma^2} \right ) dx \right ]^D}
+        {\int \exp \left (-\frac{x^2}{2\sigma^2} \right ) dx}
+        \int x^2 \exp \left (-\frac{x^2}{2\sigma^2} \right ) dx
+\end{equation}
+Integrating each of the factors in turn:	
+\begin{eqnarray}
+  \int f(\vec x) x_i^2 a_{ii} d\vec x & = &
+	a_{ii} \frac {\left [ \sqrt{2 \pi} \sigma \right ]^D}{\sqrt{2\pi} \sigma} \sigma^3 \sqrt{8 \pi} \\
+	& = & a_{ii} N \sigma^2
+\end{eqnarray}
+Therefore, in the case of the filter width being much larger than the spacing between
+the samples, that is as $n\rightarrow\infty$, the error will be related to the square
+of the filter width and the second-order rate of change of the distribution:
+\begin{equation}
+  e_1 = \frac{\sigma^2}{n} \sum_i \frac{\partial^2 P}{\partial x_i^2}
+\end{equation}
+
+In the case of the the filter width being of roughly the same order as the sample
+spacing: since the samples won't be evenly distributed, we assume a statistical
+ error in each of the sample locations:
+\begin{equation}
+  x_{ij} = x_{ij} \pm \delta_{ij}
+\end{equation}
+that will be proportional to the sample density:
+\begin{equation}
+  \delta_{ij} \approx \frac{k_j}{\left [nP(\vec x_i) \right ]^{1/D}}
+\end{equation}
+where $k_j$ is an unknown constant of proportionality.
+Thus:
+\begin{equation}
+\sigma_{\overline P}^2 = \frac{1}{N^2n^2} \sum_k \sum_i 
+	\left [ \frac{\partial w_i}{\partial x_j} \right ]^2 \delta_{ij}^2
+\end{equation}
+where:
+\begin{equation}
+\frac{\partial w_i}{\partial x_j} = \frac{x_{ij} - x_j}{\sigma^2} w_i
+\end{equation}
+
+\end{document}

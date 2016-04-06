@@ -1,0 +1,635 @@
+
+\documentclass[12pt]{report}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[dvips]{graphicx}
+
+\begin{document}
+\begin{flushleft}
+
+\section{Integrating the hydrostatic equation}
+
+\label{hyd}
+
+Suppose first that the temperature varies linearly with the logarithm of
+the pressure.  Thus:
+
+\begin{equation}
+T = b + k \ln P
+\label{hyd:tdep}
+\end{equation}
+
+where $T$ is the temperature, $P$ is the pressure and $b$ and $k$ are 
+constants.  We wish to integrate the hydrostatic equation:
+
+\begin{equation}
+\frac{dP}{dz} = \rho g \linebreak
+\label{hyd:hyd}
+\end{equation}
+
+where $z$ is altitude, $\rho$ is density and $g$ is the acceleration due to gravity.  Substituting (\ref{hyd:tdep}) into (\ref{hyd:hyd}) and using the ideal gas law allows us to integrate the change in altitude:
+
+\begin{equation}
+\Delta z = \int_{P_1}^{P_2} \frac{R(b + k \ln P)}{Pg} dP
+\end{equation}
+
+Assuming that both $R$ and $g$ are constant allows us to pull them out of the integration:
+
+\begin{eqnarray}
+\Delta z & = & \frac{R}{g} \left [ \int_{P_1}^{P_2} \frac{b}{P} dP + 
+\int_{P_1}^{P_2} \frac{k \ln P}{P}dP \right ] \\
+ & = & \frac{R}{g} \left [ b \ln P + \frac{k}{2} \ln^2 P \right ]_{P_1}^{P_2} \\
+ & = & \frac{R}{g} \left \lbrace b \ln \left ( \frac{P_2}{P_1} \right ) +
+ 	\frac{k}{2} \left [ \ln^2 P_2 - \ln^2 P_1 \right ] \right \rbrace
+\label{hyd:hyd_int}
+\end{eqnarray}
+
+The constants, $b$ and $k$, may be calculated from the values of temperature and pressure
+at the top and bottom of the layer:
+
+\begin{eqnarray}
+k & = & \frac{T_1 - T_2}{\ln (P_2/P_1)} \label{hyd:kdef} \\
+b & = & T_1-k \ln P_1
+\end{eqnarray}
+
+Substituting this into (\ref{hyd:hyd_int}) and simplifying produces the following result:
+
+\begin{equation}
+\Delta z = \frac{R}{g} \left \lbrace T_1 \ln P_2 + T_2 \ln P_1 +
+ 	\frac{k}{2} \left [ \ln^2 P_2 - \ln^2 P_1 \right ] \right \rbrace
+\label{hyd:prev_dz}
+\end{equation}
+
+where $k$ is simply taken from (\ref{hyd:kdef}).  Using this integration versus an equivalent
+one that assumes a constant temperature throughout does not produce 
+noticeably different results when numerically integrating multi-layer profiles.
+\linebreak
+\linebreak
+Equation (\ref{hyd:prev_dz}) actually simplifies further:
+
+\begin{eqnarray}
+  \Delta z & = & \frac{R}{g} \left [ \frac {1}{2} T_1 \ln P_1 + \frac{3}{2} T_1 \ln P_2 + 
+		\frac{1}{2} T_2 \ln P_1 - \frac{1}{2} T_2 \ln P_2 \right ] 
+\end{eqnarray}
+
+***Correction*** 
+\linebreak
+\linebreak
+Equation (\ref{hyd:prev_dz}) should probably be:
+\begin{equation}
+\Delta z = \frac{R}{g} \left \lbrace T_1 \ln P_2 - T_2 \ln P_1 +
+ 	\frac{k}{2} \left [ \ln^2 P_2 - \ln^2 P_1 \right ] \right \rbrace
+\end{equation}
+
+which simplifies to:
+
+\begin{eqnarray}
+  \Delta z & = & \frac{R}{2g} \left [ T_1 \ln P_1 - T_1 \ln P_2 + 
+		 T_2 \ln P_1 -  T_2 \ln P_2 \right ] \\
+  & = & \frac{R}{2g} (T_1 + T_2) \ln (P_1 / P_2)
+\end{eqnarray}
+
+equivalent to the case of an isothermal layer with a temperature equal to
+the average of the top and bottom layers.
+
+\section{Ascent rate of a weather balloon}
+
+There are three main forces affecting a rising weather balloon:  $F_b$, 
+the bouyancy force, $F_d$, the force of drag and $F_g$, the force of 
+gravity.  The bouyancy force acts upwards, the gravitational force
+acts downwards, while the drag force counters the direction of motion.
+The three forces are given as follows:
+
+\begin{eqnarray}
+F_b & = & V \rho_a \\
+F_d & = & A \rho_a c_d v^2 \\
+F_g & = & m g = V \rho_s g
+\end{eqnarray}
+
+where $V$ is the volume of the balloon, $A$ is its cross-sectional area,
+$m$ is its mass, $\rho_s$ is its density, $v$ is its speed, 
+$\rho_a$ is the density of air and $g$ is the acceleration due to gravity.
+Assuming that the balloon is travelling at terminal velocity in an
+upward direction, these forces will balance:
+
+\begin{eqnarray}
+F_b = F_d + F_g \\
+V \rho_a = A \rho_a c_d v^2 + V \rho_s g
+\label{asc:fbal2}
+\end{eqnarray}
+
+For all axially symetric shapes, the volume $V$ is related to the area $A$ as:
+
+\begin{equation}
+V = khA
+\end{equation}
+
+where $h$ is the height of the balloon and $k$ is a constant.  For prisms and 
+cylinders this constant will be unity: $k=1$.  Substituting this into 
+equation (\ref{asc:fbal2}) and solving for $v$ produces the following:
+
+\begin{equation}
+v = \sqrt{\frac{k h}{c_d} \left(1 - g \frac{\rho_s}{\rho_a} \right )}
+\end{equation}
+
+Since the balloon is composed primarily of gas, if we assume that it takes 
+on the ambient temperature, then the ratio between its density
+and that of the outside air should be roughly constant:
+
+\begin{equation}
+\frac{\rho_s}{\rho_a} \approx \frac{R_{He}}{R_a}
+\end{equation}
+
+where $R_a$ is the equivalent gas constant of air and $R_{He}$ is the 
+equivalent gas constant for the balloon (likely close to that of Helium--
+hence the subscript).  Therefore:
+
+\begin{equation}
+v \approx \sqrt{\frac{k h}{c_d} \left(1 - g \frac{R_{He}}{R_a} \right )} \approx const.
+\end{equation}
+
+\section{Azimuthal equidistant coordinate system}
+
+The following transformations may be applied to a two-dimensional spherical-
+polar coordinate system describing the surface of a shere.  
+It's most useful property is that it eliminates the singularity at one pole, where
+it is locally Cartesian.  It also defines an azimuthal equidistant projection.
+
+\subsection{Transformations}
+
+\begin{eqnarray}
+\tilde x & = & \tilde r \cos \theta \\
+\tilde y & = & \tilde r \sin \theta
+\end{eqnarray}
+
+where $\theta$ is the longitudinal coordinate in radians and $\tilde r$
+ is given as follows:
+ 
+\begin{equation}
+\tilde r = \sqrt{x^2 + y^2} = R_e (\pi/2 - \mathfrak h \phi)
+\end{equation}
+
+where $R_e$ is the radius of the sphere (planet Earth, typically) and 
+$\mathfrak h = \left \lbrace \begin{array}{r} 1 \\ -1 \end{array} \right.$
+is the hemisphere for which the transformation is defined.
+
+\subsection{Reverse transformations}
+
+\begin{eqnarray}
+\phi & = & \mathfrak h \left ( \frac{\pi}{2} - \frac{\tilde r}{R_e} \right ) \\
+\theta & = & \tan^{-1} \left (\frac{\tilde y}{\tilde x} \right )
+\end{eqnarray}
+
+\subsection{Transformation between hemispheres}
+
+\begin{eqnarray}
+\tilde r_{-\mathfrak h} & = & \pi R - \tilde r_{\mathfrak h} \\
+\tilde x_{-\mathfrak h} & = & \frac {\tilde r_{-\mathfrak h} } 
+	{\tilde r_{\mathfrak h}} \tilde x_{\mathfrak h} \\
+\tilde y_{-\mathfrak h} & = & \frac {\tilde r_{-\mathfrak h} } 
+	{\tilde r_{\mathfrak h}} \tilde y_{\mathfrak h}
+\end{eqnarray}
+
+where the subscript denotes the hemisphere of the transformation for which the quantity is defined.
+
+\subsection{Velocity transformations}
+
+\begin{eqnarray}
+\frac{d \tilde x}{dt} & = & - \mathfrak h v \frac{\tilde x}{\tilde r} - 
+		\frac{u \tilde y}{R_e \sin (\tilde r/R_e)} \\
+\frac{d \tilde y}{dt} & = & - \mathfrak h u \frac{\tilde x}{\tilde r} - 
+		\frac{v \tilde y}{R_e \sin (\tilde r/R_e)}
+\end{eqnarray}
+
+where $u$ is the velocity in the $\theta$ direction and $v$ is the velocity in
+the $\phi$ direction.  That is:
+
+\begin{eqnarray}
+u & = & R_e \cos \phi \frac{d \theta}{dt} \\
+v & = & R_e \frac{d \phi}{dt}
+\end{eqnarray}
+
+\begin{eqnarray}
+u & = & R_e \sin \left (\frac{\tilde r}{R_e} \right ) \frac{\tilde y}{\tilde r^2}
+		\left (-\frac{d \tilde x}{dt} \frac{\tilde y}{\tilde x} + 
+		\frac{d \tilde y}{dt} \right ) \\
+v & = & \frac{1}{\tilde r} \left (-\frac{d \tilde y}{dt} {\tilde x} + 
+		\frac{d \tilde x}{dt} \tilde y \right )
+\end{eqnarray}
+
+\subsection{Derivatives}
+
+\begin{eqnarray}
+\frac{d \theta}{d \tilde x} = \frac{\tilde y}{\tilde r^2} \\
+\frac{d \theta}{d \tilde y} = \frac{\tilde x}{\tilde r^2} \\
+\frac{d \phi}{d \tilde x} = \frac{\tilde x}{R_e \tilde r} \\
+\frac{d \phi}{d \tilde y} = \frac{\tilde y}{R_e \tilde r} \\
+\end{eqnarray}
+
+\subsection{Metric}
+
+The metric may be derived from the above derivatives:
+
+\begin{eqnarray}
+\left (\frac{ds}{d \tilde x} \right )^2 & = & \frac{1}{\tilde r^2} \left [
+	\frac{R_e^2}{\tilde r^2} \sin^2 \left (\frac{\tilde r}{R_e} \right ) 
+	\tilde y^2 + \tilde x^2 \right ] \\
+\left (\frac{ds}{d \tilde y} \right )^2 & = & \frac{1}{\tilde r^2} \left [
+	\frac{R_e^2}{\tilde r^2} \sin^2 \left (\frac{\tilde r}{R_e} \right )
+	\tilde x^2 + \tilde y^2 \right ]
+\end{eqnarray}
+
+\subsection{Equations of motion}
+
+These have yet to be derived...
+
+\section{Evolution of the tracer gradient}
+
+The equations for a conserved tracer are as follows:
+
+\begin{equation}
+\frac{dq}{dt} = \frac{\partial q}{\partial t} + \nabla q \cdot \vec v = 0
+\label{tgrad:trac_eq}
+\end{equation}
+
+where $q$ is the concentration of the tracer: volume-mixing-ratio for a
+compressible flow or density or similar measure for an incompressible one.
+Taking the gradient of the middle expression produces the following result:
+
+\begin{equation}
+\frac{\partial (\nabla q)}{dt} + \nabla (\nabla q) \cdot \vec v + \nabla q \cdot \nabla \vec v = 0
+\label{tgrad:grad_trac}
+\end{equation}
+
+As in (\ref{tgrad:trac_eq}), one can apply the full derivative to the tracer gradient, $\nabla q$ in the
+same manner as to the tracer itself:
+
+\begin{equation}
+\frac{d (\nabla q)}{dt} = \frac{\partial (\nabla q)}{\partial t} + \nabla (\nabla q) \cdot \vec v
+\label{tgrad:tgrad_full}
+\end{equation}
+
+Combining equations (\ref{tgrad:grad_trac}) and (\ref{tgrad:tgrad_full}) produces
+the following exact equation for the evolution of the tracer gradient in Lagrangian
+space:
+
+\begin{equation}
+\frac{d (\nabla q)}{dt} = - \nabla q \cdot \nabla \vec v 
+\end{equation}
+
+This may be represented in the following manner:  we define the matrix $\boldsymbol{H^\prime}$
+as follows:
+
+\begin{eqnarray}
+\frac{d \boldsymbol{H^\prime}}{dt} & \equiv & \boldsymbol{H^\prime} \cdot \nabla \vec v \\
+\boldsymbol{H^\prime_0} \equiv \boldsymbol{H^\prime}(t=0) & = & \boldsymbol{I}\nonumber
+\label{tgrad:hprime_def}
+\end{eqnarray}
+
+It follows that:
+
+\begin{eqnarray}
+\nabla q  & = & \nabla q_0 \cdot \boldsymbol{H^\prime} \label{tgrad:qevol}\\
+q(t=0) & \equiv & q_0\nonumber
+\end{eqnarray}
+
+These definitions are parallel to those describing the evolution of a minute 
+error vector, $\delta \vec x$, derived for the purposes of computing the
+Lyapunov exponents.  Thus:
+
+\begin{eqnarray}
+\frac{d (\delta \vec x)}{dt} & = & \nabla \vec v \cdot \delta \vec x \label{tgrad:delx_evol}\\
+\frac{d \boldsymbol H}{dt} & = & \nabla \vec v \cdot \boldsymbol H; ~~
+ \boldsymbol {H_0} \equiv \boldsymbol{I} \label{tgrad:hdef}\\
+\delta \vec x & = & \boldsymbol{H} \cdot \delta \vec x_0
+\end{eqnarray}
+
+The difference is that these equations, being derived from a Taylor expansion, are 
+only approximate for error vectors of non-negligible magnitude.  It is easy to show that:
+
+\begin{equation}
+\boldsymbol{H^\prime} = \boldsymbol{H^{-1}}
+\label{tgrad:hprimevh}
+\end{equation}
+
+We will use two methods to prove (\ref{tgrad:hprimevh}): one more hand-waving
+that calls upon the properties of advected tracers, and another more rigorous that
+applies to all equations of the form of (\ref{tgrad:hprime_def}) and (\ref{tgrad:hdef}).
+\linebreak
+\linebreak
+Consider a minute tracer difference:
+\begin{equation}
+\delta q = \delta \vec x \cdot \nabla q
+\end{equation}
+defined by the difference 
+in tracer concentration at two fixed locations in Lagrangian space.  It is
+easy to see that this quantity should be conserved, moreover it can also 
+be shown from equations (\ref{tgrad:qevol}) and (\ref{tgrad:delx_evol}):
+
+\begin{eqnarray}
+\frac{d (\delta q)}{dt} & = & \nabla q \cdot \frac{d (\delta \vec x)}{dt} \cdot + 
+		\frac{d (\nabla q)}{dt} \cdot \delta \vec x \\
+ & = & \nabla q \cdot \nabla \vec v \cdot \delta \vec x - \nabla q \cdot \nabla \vec v \cdot \delta \vec x \\
+ & = & 0
+\end{eqnarray}
+
+To prove equation (\ref{tgrad:hprimevh}):
+
+\begin{eqnarray}
+\nabla q & = & \delta q (\delta \vec x)^{-1} \\
+\nabla q_0 \cdot \boldsymbol{H^\prime} & = & \delta q (\delta \vec x)^{-1} \cdot \boldsymbol{H^{-1}}\\
+\boldsymbol{H^\prime} & = & \boldsymbol{H^{-1}}
+\end{eqnarray}
+
+As a more rigorous and general approach, consider the time evolution of
+the quantity, $\boldsymbol{H^\prime} \cdot \boldsymbol{H}$:
+
+\begin{eqnarray}
+\frac{d (\boldsymbol{H^\prime} \cdot \boldsymbol{H})}{dt} & = & 
+	\boldsymbol{H^\prime} \cdot \nabla \vec v \cdot \boldsymbol{H} -
+	\boldsymbol{H^\prime} \cdot \nabla \vec v \cdot \boldsymbol{H} \\
+ & = & 0 \nonumber
+\end{eqnarray}
+
+If both matrices are initialised at the same time with the identity matrix, then:
+
+\begin{equation}
+\boldsymbol{H^\prime} \cdot \boldsymbol{H} = \boldsymbol{H^\prime_0} \cdot \boldsymbol{H_0} = \boldsymbol I
+\end{equation}
+
+\section{Adaptive Gaussian filters}
+
+\subsection{Extrapolation of the confidence rating}
+
+Consider a joint probability composed of two equal-sized Gaussians of unit width.
+The coordinate system is defined so that the class-border lies on the origin.  The
+difference between the two conditional probabilities is given as:
+
+\begin{eqnarray}
+R(x) & = & P(1 | x) - P(2 | x) \\
+ & = & \frac{P(1, x) - P(2, x)}{P(1, x) + P(2, x)} \\
+ & = & \frac{e^{-\frac{(x-b)^2}{2\sigma^2}} - e^{-\frac{(x+b)^2}{2\sigma^2}}}
+ 		{e^{-\frac{(x-b)^2}{2\sigma^2}} + e^{-\frac{(x+b)^2}{2\sigma^2}}}
+\end{eqnarray}
+ 
+ where $b$ is the offset of each of the classes and $\sigma$ is their width.
+ Simplifying:
+ 
+\begin{eqnarray}
+R(x) & = & \frac{e^{-\frac{x^2 - 2bx + b^2}{2\sigma}} - e^{-\frac{x^2 + 2bx + b^2}{2\sigma}}}
+		{e^{-\frac{x^2 - 2bx + b^2}{2\sigma}} + e^{-\frac{x^2 + 2bx + b^2}{2\sigma}}} \\
+& = & \frac{e^{-\frac{bx}{\sigma^2}} - e^{\frac{bx}{\sigma^2}}}
+		{e^{-\frac{bx}{\sigma^2}} + e^{\frac{bx}{\sigma^2}}} \\
+& = & \tanh(bx/\sigma^2)
+\end{eqnarray}
+
+We wish to constrain the $R(x)$ so that it has a unit slope at the origin:
+
+\begin{eqnarray}
+\frac{dR}{dt} & = & \frac{b}{\sigma^2} \mathrm{sech}^2 \left (\frac{bx}{\sigma^2} \right ) = 1 \\
+\frac{b}{\sigma^2} & = & 1
+\end{eqnarray}
+
+or,
+
+\begin{equation}
+R(x) = \tanh(x)
+\label{cext:r1sim}
+\end{equation}
+
+Now consider a pair of classes in multiple dimensions.  The difference between
+the conditional probabilities is given, as before, by:
+
+\begin{equation}
+R(\vec x) = P(1 | \vec x) - P(2 | \vec x)
+\end{equation}
+  
+  The location
+of a single point on the class border is known:
+
+\begin{equation}
+R(\vec x_b)=0
+\end{equation}
+
+where $\vec x_b$ is the border point.  Its gradient vector, $\nabla R(\vec x_b)$
+is also known.  Now consider an arbitrary point, $\vec x$.  We wish to extrapolate
+$R(\vec x)$ to that point.  Consider a transformed coordinate defined by 
+projecting the difference vector, $\vec x - \vec x_b$, onto the gradient vector
+and multiplying by the magnitude of the latter:
+
+\begin{eqnarray}
+p & = & |\vec \nabla R(\vec x_b)| \underset{\vec \nabla R(\vec x_b)} {\mathrm{proj}} (\vec x - \vec x_b) \\
+  & = & \nabla R(\vec x_b) \cdot (\vec x - \vec x_b)
+\end{eqnarray}
+
+We can approximate $R(\vec x)$ as in equation (\ref{cext:r1sim}) by:
+
+\begin{equation}
+R(\vec x) \approx \tilde R(\vec x) = \tanh(p)
+\end{equation}
+
+It is easy to show:
+
+\begin{equation}
+\nabla \tilde R(\vec x_b) = \nabla R(\vec x_b)
+\end{equation}
+
+and:
+
+\begin{equation}
+\tilde R(\vec x_b) = 0
+\end{equation}
+
+\subsection{Relationship between $k$ and $W_c$}
+
+We assume that the value of the pdf, $P(\vec x)$ is more or less constant within
+the immediate vicinity.  From its definition:
+
+\begin{equation}
+P(\vec x) \approx \frac{k}{n\delta V}
+\end{equation}
+
+where $k$ is the number of samples within a volume element $\delta V$ and $n$ is the
+total number of samples.  The approximate the distance of the farthest sample, $d$,
+as follows:
+
+\begin{eqnarray}
+d & \approx & (\delta V)^{1/D} \\
+	& \approx & \frac{k^{1/D}} {P^{1/D} n^{1/D}}
+\label{kvwc:pknn}
+\end{eqnarray}
+
+where $D$ is the number of dimensions.  Assuming the value of $P$ is approximated via
+Gaussian filtering:
+
+\begin{equation}
+P(\vec x) \approx \frac{W}{(2\pi)^{D/2}\sigma^{D}}
+\label{kvwc:pgauss}
+\end{equation}
+
+Substituting (\ref{kvwc:pgauss}) into (\ref{kvwc:pknn}) produces the following result:
+
+\begin{equation}
+d \approx \frac{\sqrt{2\pi} \sigma k^{1/D}}{W^{1/D}}
+\end{equation}
+
+The approximate ratio of the largest possible weight wrt the smallest
+is given as:
+
+\begin{equation}
+f \approx \exp \left (- \frac{\pi k^{2/D}}{W^{2/D}} \right )
+\end{equation}
+
+Solving for $k$:
+
+\begin{equation}
+k \approx \left (- \frac{\ln f}{\pi} \right )^{D/2} W
+\end{equation}
+
+To ensure that the actual ratio of the smallest weight wrt the largest is less than
+or equal to $f$, $k$ should be chosen to be somewhat greater than the rhs.
+		
+\subsection{Better relationship between $k$ and $W_c$}
+
+From the definition of the probability density:
+\begin{equation}
+P \approx \frac{k}{nV}
+\end{equation}
+where $k$ is the number of samples in the estimate,
+$n$ is the total number of samples and $V$ is volume.
+(The equation is exact in the limit as $n \rightarrow \infty$
+and $V \rightarrow 0$.)
+The volume of a hypersphere of radius $r$ and dimension $D$ is:
+\begin{equation}
+V = \frac{\pi^{D/2} r^D}{\Gamma(D/2+1)}
+\end{equation}
+giving us:
+\begin{equation}
+P \approx \frac{k \Gamma(D/2 + 1)}{n \pi^{D/2} r^D}
+\end{equation}
+Solving for $r$:
+\begin{equation}
+r \approx \frac{1}{\sqrt{\pi}}\left [\frac{k \Gamma(D/2+1)}{nP} \right]^{1/D}
+\end{equation}
+Substituting the equation of $P$ that has been approximated by
+AGF:
+\begin{equation}
+P \approx \frac{W}{n(2\pi)^{D/2}\sigma}
+\end{equation}
+we get:
+\begin{equation}
+r \approx \sqrt{2} \sigma \left [\frac{k \Gamma(D/2 + 1)}{W} \right ]^{1/D}
+\end{equation}
+Finally, we substitute this into the filter function to
+get the smallest value for the weight:
+\begin{eqnarray}
+f & = & \exp \left (-\frac{r^2}{2\sigma^2} \right ) \\
+& = & \exp \left \lbrace -\left [ \frac{k \Gamma(D/2+1)}{W} \right ]^{2/D} \right \rbrace
+\end{eqnarray}
+Solving for $k$:
+\begin{equation}
+k \approx \frac{(-\ln f)^{D/2} W}{\Gamma(D/2 + 1)}
+\end{equation}
+
+This will generate much more optimistic estimates for $k$ than the
+previous derivation.
+
+\subsection{Gradient of an AGF estimate}
+
+Since the final result is typically just a summation of the filter weights, 
+usually multiplied by some nominally constant values, we start by taking their gradients: 
+
+\begin{equation}
+  \frac{\partial w_i}{\partial x_j} = \left (\frac{\partial w_i}{\partial x_j} \right )_\sigma
+		+ \frac{\partial w_i}{\partial \sigma} \frac{\partial \sigma}{\partial x_j}
+  \label{gradagf:grad_w}
+\end{equation}
+
+Since the filter width is not constant, we must include a term to account for its change.
+The second factor of the second term, the gradient of the filter width, is not known,
+but we can easily solve for it by taking the derivative of the total weight, which is
+a constant:
+
+\begin{eqnarray}
+  \frac{\partial W}{\partial x_j} & = & \frac{\partial}{\partial x_j} \sum_i w_i \\
+  & = & \sum_i \frac{\partial w_i}{\partial x_j} \\
+  & = & \sum_i \left [\left (\frac{\partial w_i}{\partial x_j} \right )_\sigma
+                + \frac{\partial w_i}{\partial \sigma} 
+		\frac{\partial \sigma}{\partial x_j} \right ] \\
+  & = & 0
+\end{eqnarray}
+
+Solving:
+
+\begin{equation}
+  \frac{\partial \sigma}{\partial x_j} = - \frac
+		{\left (\frac{\partial w_i}{\partial x_j} \right )_\sigma}
+		{\frac{\partial w_i}{\partial \sigma}}
+  \label{gradagf:grad_sigma}
+\end{equation}
+
+For the case of a Gaussian filter the weights are given by:
+
+\begin{eqnarray}
+  w_i & = & \exp \left [ - \frac{d_i^2}{2 \sigma^2} \right ] \\
+  	& = & \exp \left [ - \frac{\sum_j (x_{ij} - x_j)^2}{2 \sigma^2} \right ]
+\end{eqnarray}
+
+which generates the following partials:
+
+\begin{eqnarray}
+  \left (\frac{\partial w_i}{\partial x_j} \right )_\sigma & = &
+		 \frac{(x_{ij} - x_j)}{\sigma^2} w_i \\
+  {\frac{\partial w_i}{\partial \sigma}} & = & \frac{d_i^2}{\sigma^3} w_i
+\end{eqnarray}
+
+Subsituting these into equations (\ref{gradagf:grad_sigma}) and 
+(\ref{gradagf:grad_w}) respectively, produces the following:
+
+\begin{eqnarray}
+  \frac{\partial \sigma}{\partial x_j} & = & - \frac{\sigma \sum_i (x_{ij} - x_j) w_i}
+		{\sum_i d_i^2 w_i} \\
+  \frac{\partial w_i}{\partial x_j} & = & \frac{w_i}{\sigma^2} \left [x_{ij} - x_j 
+		- d_i^2 \frac{\sum_k (x_{kj} - x_j) w_k} {\sum_k d_k^2 w_k} \right ]
+\end{eqnarray}
+
+To calculate the gradient of an estimate, we simply multiply the sample ordinates
+with the gradients of the weights and divide by the total weight (which is constant):
+
+\begin{eqnarray}
+  \frac{\partial \bar y}{\partial x_j} & = & \sum_i \frac{\partial w_i}{\partial x_j} y_i \\
+  & = & \frac{1}{W \sigma^2} \sum_i w_i y_i \left [ x_{ij} - x_j
+                - d_i^2 \frac{\sum_k (x_{kj} - x_j) w_k} {\sum_k d_k^2 w_k} \right ]
+\end{eqnarray}
+
+For a two class classification, the gradient of the difference of the conditional 
+probabilities is given as follows:
+
+\begin{eqnarray}
+  \frac{\partial R}{\partial x_j} & \approx & \sum_i \frac{\partial w_i}{\partial x_j} (2c_i-3) \\
+  & \approx & \frac{1}{W \sigma^2} \sum_i w_i (2c_i - 3) \left [ x_{ij} - x_j
+                - d_i^2 \frac{\sigma \sum_k (x_{kj} - x_j) w_k} {\sum_k d_k^2 w_k} \right ]
+\end{eqnarray}
+
+using our rather awkward convention of enumerating the first class by ``$1$'' 
+and the second by ``$2$.'' \linebreak
+\linebreak
+The derivatives of a probability density estimate are:
+
+\begin{eqnarray}
+  \frac{\partial P (\vec x)}{\partial x_j} & \approx & 
+		\frac{1}{nN} \left (\frac{\partial W}{\partial x_j} - 
+		\frac{W}{N} \frac{\partial N} {\partial x_j} \right ) \\
+  & \approx & \frac {W}{n \sigma} \frac{\partial} {\partial x_j} \\
+  & \approx & \frac{\sum_i (x_{ij} - x_j) w_i} {n \sum_i d_i^2 w_i}
+\end{eqnarray}
+
+which may be useful both for clustering analysis and
+calculating an error tolerance if I ever get around to these things...\linebreak
+\linebreak
+Definitions of all the symbols can be found in the paper, ``Adaptive Guassian filters:
+a powerful new method for supervised learning.''
+
+\end{flushleft}
+\end{document}
+

@@ -94,6 +94,7 @@ produces the following:
 or, in Eulerian form:
 \begin{equation}
 \frac{\partial q}{\partial t} = - \vec v \cdot \nabla q
+\label{advection_eqn}
 \end{equation}
 This is the {\it advection equation}.
 
@@ -124,9 +125,9 @@ therefore we write it out component-by-component:
 \begin{equation}
 \nabla \vec v = \left [
 \begin{array}{ccc}
-\frac{\partial v_x}{\partial x} & \frac{\partial \vec v_x}{\partial y} & \frac{\partial \vec v_x}{\partial z} \\
-\frac{\partial v_y}{\partial x} & \frac{\partial \vec v_y}{\partial y} & \frac{\partial \vec v_y}{\partial z} \\
-\frac{\partial v_z}{\partial x} & \frac{\partial \vec v_z}{\partial y} & \frac{\partial \vec v_z}{\partial z}
+\frac{\partial v_x}{\partial x} & \frac{\partial v_x}{\partial y} & \frac{\partial v_x}{\partial z} \\
+\frac{\partial v_y}{\partial x} & \frac{\partial v_y}{\partial y} & \frac{\partial v_y}{\partial z} \\
+\frac{\partial v_z}{\partial x} & \frac{\partial v_z}{\partial y} & \frac{\partial v_z}{\partial z}
 \end{array} \right ]
 \end{equation}
 where $\vec x=[x_1,~x_2,~x_3]=[x,~y,~z]$.
@@ -150,7 +151,6 @@ We can relate $H$ to the integrated trajectory, $\Phi$, as follows:
 or,
 \begin{equation}
 \nabla_{\vec x_0} \Phi = H
-\label{advection_eqn}
 \end{equation}
 
 In conjunction with the equations for the evolution of error vectors, above,
@@ -165,7 +165,7 @@ Meanwhile, using the total derivative:
 \frac{\mathrm d}{\mathrm d t} \nabla q = \vec v \cdot \nabla \nabla q + 
 		\frac{\partial}{\partial t} \nabla q
 \end{equation}
-Combining the two:
+and combining the two:
 \begin{equation}
 \frac{\mathrm d}{\mathrm d t} \nabla q = -\nabla q \cdot \nabla \vec v
 \label{evolution_tracer_gradient}
@@ -195,11 +195,11 @@ and that:
 \nabla q = \nabla q_0 \cdot H^\prime
 \end{equation}
 
-Define $\Phi^{-1}(\vec x,~t,~\Delta t)$ as:
+Also, by defining $\Phi^{-1}(\vec x,~t,~\Delta t)$ as,
 \begin{equation}
 \Phi^{-1}[\Phi(\vec x_0,~t_0,~\Delta t),~t_0+\Delta t,~\Delta t]=\vec x_0
 \end{equation}
-Thus,
+we can show:
 \begin{equation}
 H^\prime=\nabla \Phi^{-1}
 \end{equation}
@@ -209,7 +209,7 @@ H^\prime=\nabla \Phi^{-1}
 \label{map_section}
 
 The dynamics of the tracer, $q$, can be summarized using a linear
-{\it tranpsort map}, $Q$:
+{\it transport map}, $Q$:
 \begin{equation}
 q(\vec x,~t)=\int_V Q(\vec x_0,~\vec x,~t_0,~\Delta t) q(\vec x_0,~t_0) \mathrm d \vec x_0
 \label{tracer_map_continuous}
@@ -441,7 +441,7 @@ If there is any significant difference between the largest and next largest
 Lyapunov exonents, the largest singular value will come to dominate the matrix
 as it evolves forward in time.  Thus:
 \begin{equation}
-r_i(t \rightarrow \infty) = \sum_j u_{i1} s_1 v_{1j} r_j(t_0)
+r_i(t \rightarrow \infty) = \sum_j u_{i1} s_1 v_{j1} r_j(t_0)
 \end{equation}
 and:
 \begin{equation}
@@ -686,7 +686,7 @@ in agreement with our definition of a strictly diffusive tracer map in
 \section{Adding sources and sinks}
 
 We wish to add a source term, $\vec \sigma$, to the matrix tracer model
-described in the previous two sections:
+described in the previous sections:
 \begin{equation}
 \frac{\mathrm d \vec q}{\mathrm d t} = A(t) \cdot \vec q + \vec \sigma(t)
 \end{equation}

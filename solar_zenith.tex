@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+
+\begin{document}
+
+{\LARGE Calculating the incident fraction of solar radiation as a function of time and latitude}
+
+First, consider a Cartesian coordinate system with the origin as the Earth's
+centre and the $x-y$ plane lying along the equator.  If we model the Earth
+as a sphere of radius $r$, a line of latitude will trace out a circle
+given by the following equations:
+\begin{eqnarray}
+x & = & r \cos \phi \cos \theta \\
+y & = & r \cos \phi \sin \theta \\
+z & = & r \sin \phi
+\end{eqnarray}
+where $\phi$ is latitude and $\theta$ is an angle parameter.  If one is
+standing at a given longitude, $\theta$ could also be considered the time
+of day represented as an angle with $\theta=0$ representing noon, while
+$\theta=\pi$ is midnight.
+
+Now consider a new coordinate system with the x-y plane along the plane
+of the ecliptic and the x-axis pointing towards the sun.  During the
+winter solstice, the direction of the Earth's axis in the 
+x-z plane will be described
+by the following unit vector:
+\begin{eqnarray}
+x & = & \sin \gamma \\
+z & = & \cos \gamma
+\end{eqnarray}
+where $\gamma$ is the angle of the Earth's tilt.
+For a different time of year, which we represent as another angle, 
+$\alpha$, ($\alpha=0$ is the winter solstice) 
+we can project this vector onto the x-z plane as follows:
+\begin{eqnarray}
+x & = & \cos \alpha \sin \gamma \\
+z & = & \cos \gamma
+\end{eqnarray}
+This will be the effective tilt of the Earth--
+we are not concerned with the projection along the y-axis since this
+has no effect on the calculations.
+
+Now consider a ray of sunlight in our previous coordinate system.
+By rotating the effective axis by ninety degrees and normalizing it
+we get the direction vector pointing to the ray's source (i.e., the sun).
+\begin{equation}
+\hat v = \frac{(\cos \gamma, ~ 0, ~ -\cos \alpha \sin \alpha)}
+		{\sqrt{\cos^2 \alpha \sin^2 \gamma + \cos^2 \gamma}}
+\end{equation}
+To get the zenith angle of the Sun, we simply take the dot-product
+of this with the normal vector:
+\begin{eqnarray}
+\hat n & = & (\cos \phi \cos \theta, ~ \cos \phi \sin \theta, ~ \sin \phi) \\
+\beta & = & \cos^{-1} (\hat v \cdot \hat n) \\
+& = & \cos^{-1}\left ( \frac{\cos \phi \cos \theta \cos \gamma -
+	\sin \phi \cos \alpha \sin \gamma} 
+	{\sqrt{\cos^2 \alpha \sin^2 \gamma + \cos^2 \gamma}} \right )
+\end{eqnarray}
+where $\beta$ is the local solar zenith angle and $\hat n$ is the normal vector.  
+The cosine of this angle
+gives the incident fraction of
+solar radiance in the absence of any atmosphere for all daylight
+values, that is those for which it is greater than one or $\beta < \pi/2$.
+
+For use in ocean and similar simulations, we generally don't care about
+diurnal variations so this result would be too highly resolved.
+A more useful value would be the fraction of incident solar radiation
+averaged over all hours of daylight.  The daylight values of $\theta$
+are given as:
+\begin{eqnarray}
+\hat v \cdot \hat n & > & 0 \\
+\frac{\cos \phi \cos \theta \cos \gamma - \sin \phi \cos \alpha \sin \gamma}
+	{\sqrt{\cos^2 \alpha \sin^2 \gamma + \cos^2 \gamma}} & > & 0 \\
+\cos \theta & > & \frac{\sin \phi \cos \alpha \sin \gamma}{\cos \phi \cos \gamma}\\
+| \theta | & < & \cos^{-1} (\tan \phi \cos \alpha \tan \alpha) 
+\end{eqnarray}
+Now we integrate $\cos \beta$ over these values of $\theta$:
+\begin{eqnarray}
+\theta_0 & = & \cos^{-1} (\tan \phi \cos \alpha \tan \alpha) \\
+\bar Q /Q_0 & = & \frac{1}{2\pi} \int_{-\theta_0}^{\theta_0} \hat v \cdot \hat n \\
+	& = & \frac{1}{\pi} \int_0^{\theta_0} 
+	\frac{\cos \phi \cos \theta \cos \gamma - \sin \phi \cos \alpha \sin \gamma}
+	{\sqrt{\cos^2 \alpha \sin^2 \gamma + \cos^2 \gamma}} d\theta \\
+	& = & \frac{\cos \phi \cos \gamma \sin \theta_0 - \theta_0 \sin \phi \cos \alpha \sin \gamma}
+		{\pi \sqrt{\cos^2 \alpha \sin^2 \gamma + \cos^2 \gamma}} 
+\end{eqnarray}
+where $\bar Q$ is the average amount of solar radiation incident on the Earth's surface as a
+function of latitude and time of year while $Q_0$ is the total amount of solar radiation
+travelling through space--the so-called ``solar constant.''  
+
+Note that for high latitudes
+and times of year close to the solstice, there will be values
+for which the $\theta_0$ will be undefined because the cosine from which it is calculated
+is either greater than or less than one.  In this case we set it to the extremum of its
+allowable range, that is the cosine goes to either to one or
+minus one respectively giving values for $\theta_0$ of $0$ and $\pi$.
+In other words, for the purpose of this integration,
+the sun cannot rise after noon and set before noon, nor
+can it rise before midnight and set after midnight because this would give
+total hours of daylight less than zero or greater than twenty-four hours.
+
+All of this of course neglects any atmospheric effects such as diffraction,
+scattering or absorption.
+
+ 
+\end{document}
+ 
