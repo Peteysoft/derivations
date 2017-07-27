@@ -1,0 +1,458 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+%type classes:
+%\newcommand{\subclass}{\mathfrak{\sigma}}
+\newcommand{\subclass}{\mathfrak{i}}
+\newcommand{\scalarclass}{\mathfrak{s}}
+\newcommand{\vectorclass}{\vec{\mathfrak{v}}}
+\newcommand{\matrixclass}{\mathfrak{M}}
+
+%operators:
+\newcommand{\inner}{\cdot}
+\renewcommand{\outer}{\otimes}
+\newcommand{\summation}[1]{\underset{#1}{\,\mathbb{S}\,}}
+
+%special values:
+\newcommand{\zeromatrix}{\oslash}
+\newcommand{\identity}{I}
+
+%subscript domains:
+\newcommand{\domain}[1]{\mathfrak{#1}}
+
+\begin{document}
+
+\section{Introduction}
+
+We are interested in a generalized abstract algebra describing matrix
+arithmetic.
+In particular, we are interested first, in an algebra that includes scalars,
+vectors and matrices as separate, but interoperable type sets as opposed to one
+that treats them as a single type (``tensor'') defined by rank; and second,
+one that unites both linear algebra and its continuum generalization
+defined over function spaces.
+
+Such an algebraic structure goes a good deal beyond simple rings and fields
+in elementary abstract algebra because we are dealing with multiple sets
+with different conventions for the additive and multiplicative operators
+and with inter-operations between these sets.
+This makes for a very complicated algebraic structure.
+
+\section{Symbols}
+
+Here we define the different symbols used in this summary.
+Symbols unique to a given type will be introduced in the discussion of that
+type.
+
+\subsection{Types}
+
+We will use four different types. These are:
+
+Subscripts:
+\begin{equation}
+i \in \subclass
+\end{equation}
+Subscripts will be denoted primarily by the letters $i$, $j$ and $k$.
+The only property we need to define for the subscript type is the existence
+of equality:
+\begin{equation}
+	i = j \land j = k \rightarrow i = k
+\end{equation}
+
+Scalars:
+\begin{equation}
+	s \in \scalarclass
+\end{equation}
+Scalars are denoted by lower case letters.
+
+Vectors:
+\begin{equation}
+	\vec v \in \vectorclass
+	\label{vectormembership}
+\end{equation}
+Vectors are lower-case and will be further marked by the vector symbol.
+
+And matrices:
+\begin{equation}
+	A \in \matrixclass
+	\label{matrixmembership}
+\end{equation}
+Matrices are denoted by upper-case letters.
+
+\subsection{Operators}
+
+Addition:
+\begin{equation}
+	a = b+c
+\end{equation}
+
+Subtraction:
+\begin{equation}
+	a = b - c
+\end{equation}
+
+Multiplication:
+\begin{equation}
+	a = b c
+\end{equation}
+
+Dot or inner product:
+\begin{equation}
+	a = \vec b \inner \vec c
+\end{equation}
+
+Subscript operator: we borrow square brackets from computer programming
+languages such as C for our subscript operator.
+A double subscript of a matrix produces a scalar, hence we use the lower-case
+of the same letter as the whole matrix.
+For example, to subscript $A$ with $i$ and $j$:
+\begin{equation}
+	a[i][j]
+\end{equation}
+To subscript a row of a matrix, which returns a vector:
+\begin{equation}
+	\vec a[i]
+\end{equation}
+and to subscript a column:
+\begin{equation}
+	\vec a[*][j]
+\end{equation}
+
+Likewise, to subscript the vector $\vec v$, we remove the vector symbol:
+\begin{equation}
+	v[i]
+\end{equation}
+
+Summation operator:
+\begin{equation}
+	\summation{i} v[i]
+\end{equation}
+To understand where we're going here, this is meant to generalize both the 
+discrete summation operator:
+\begin{equation}
+	\sum_i v_i
+\end{equation}
+and the integral operator:
+\begin{equation}
+	\int v(x) \mathrm d x
+\end{equation}
+
+\section{General properties of arithmetic operators}
+
+Associativity:
+\begin{eqnarray}
+	A + (B + C) & = & (A + B) + C \\
+	A(BC) & = & (AB)C
+\end{eqnarray}
+Note that in this section, even though the examples are given for matrices,
+the properties apply to all three types.
+
+Distributive property:
+\begin{eqnarray}
+	A (B + C) & = & A B + A C \\
+	(B + C) A & = & B A + C A
+\end{eqnarray}
+
+Commutative property:
+\begin{equation}
+	A + B = B + A
+\end{equation}
+
+Definition of subtraction:
+\begin{eqnarray}
+	a - b = 0 & \iff & a = b \\
+	\vec a - \vec b = \vec 0 & \iff & \vec a = \vec b \\
+	A - B = \zeromatrix & \iff & A = B
+\end{eqnarray}
+
+Definition of negation:
+\begin{equation}
+	A - B = A + (- B) = A + (-1 B)
+\end{equation}
+
+Scalar identities:
+\begin{eqnarray}
+	A + 0 & = & A \\
+	1 A & = & A \\
+\end{eqnarray}
+
+You can multiply a scalar with another scalar,
+a scalar with a vector, a scalar with a matrix, a 
+matrix with a vector and a matrix with another matrix but you cannot
+multiply a vector with another vector.
+Special multiplicative operators for vectors will be introduced in Section
+\ref{vectors}.
+
+Similarly, you can add a scalar to any other type, a vector to another
+vector or a matrix to another matrix but you cannot add a vector to
+a matrix.
+
+See the summaries in Section \ref{summary}.
+
+\subsection{Properties of the summation operator}
+
+Linearity:
+\begin{eqnarray}
+	\summation{i} \left [ a(i) + b(i) \right ] & = & \summation{i} a(i) + \summation{i} b(i) \\
+	\summation{i} c f(i) & = & c \summation{i} f(i)
+\end{eqnarray}
+where $f(i)$ denotes a subscript expression involving $i$.
+
+
+\section{Properties of scalars}
+
+Scalars, unlike vectors and matrices, have an ordering:
+\begin{equation}
+	i > j \land j > k \rightarrow i > k
+\end{equation}
+
+Multiplication is always commutative:
+\begin{eqnarray}
+	a b & = & b a \\
+	a \vec b & = & \vec b a \\
+	a B & = & B a
+\end{eqnarray}
+
+Special scalars:
+\begin{eqnarray}
+	1 a & = & a \\
+	0 a & = & 0 \\
+	a + 0 & = & a
+\end{eqnarray}
+
+Norm (absolute value):
+\begin{eqnarray}
+	| a | & \ge & 0 \\
+	| a | = 0 & \iff & a=0 \\
+	| a | = a & \iff & a \ge 0 \\
+	| a | = -a & \iff & a \le 0
+\end{eqnarray}
+
+Division is defined as the inverse of multiplication:
+\begin{equation}
+	c = \frac{a}{b} \rightarrow a = b c
+\end{equation}
+
+Multiplication with a vector:
+\begin{eqnarray}
+	\vec y & = & a \vec x \\
+	\forall i\, y[i] & = & a x[i]
+\end{eqnarray}
+
+Multiplication with a matrix:
+\begin{eqnarray}
+	Y & = & a X \\
+	\forall i \forall j \, y[i][j] & = & a x[i][j]
+\end{eqnarray}
+
+\section{Properties of vectors}
+\label{vectors}
+
+Equality:
+\begin{equation}
+	\vec a = \vec b \iff \forall i~a[i] = b[i]
+\end{equation}
+
+The dot or inner product is defined:
+\begin{equation}
+	\vec a \inner \vec b \equiv \summation{i} a[i] b[i]
+\end{equation}
+
+Properties of the dot product:
+\begin{eqnarray}
+	\vec x \inner \vec y & = & \vec y \inner \vec x \\
+	\vec x \inner (c \vec y) & = & c \vec x \inner \vec y \\
+	\vec a \inner (\vec b + \vec c) & = & \vec a \inner \vec b + \vec a \inner \vec c
+\end{eqnarray}
+
+Special vectors:
+\begin{eqnarray}
+	\vec v + \vec 0 & = & \vec v \\
+	\vec v \inner \vec 0 & = & 0 \\
+	\vec v \inner \vec 1 & = & \summation{i} v[i]
+\end{eqnarray}
+
+The norm is typically defined (but need not be...):
+\begin{equation}
+	| \vec v |^2 = \vec v \inner \vec v
+\end{equation}
+and has the following properties:
+\begin{eqnarray}
+	| \vec v | & \ge & 0 \\
+	| \vec v | = 0 & \iff & \vec v = \vec 0
+\end{eqnarray}
+Triangle inequality:
+\begin{equation}
+	| \vec a | + | \vec b | \ge | \vec a + \vec b |
+\end{equation}
+If we take the above definition of the norm, the triangle inequality may
+be proven using the properties of the summation operator and addition
+and multiplication.
+
+Outer product:
+\begin{eqnarray}
+	C & = & \vec a \outer \vec b \\
+	c[i][j] & = & a[i] b[j]
+\end{eqnarray}
+
+Properties of the outer product:
+\begin{eqnarray}
+	\vec x \outer \vec y & = & (\vec y \outer \vec x)^T \\
+	\vec x \outer (c \vec y) & = & c \vec x \outer \vec y \\
+	\vec a \outer (\vec b + \vec c) & = & \vec a \outer \vec b + \vec a \outer \vec c
+\end{eqnarray}
+
+Orthogonality:
+\begin{equation}
+	\vec a \perp \vec b \iff \vec a \inner \vec b = 0
+\end{equation}
+
+Properties of the dot product (contingent on the above definition of the norm):
+\begin{eqnarray}
+	\vec x \inner \vec y = | \vec x | | \vec y | & \iff & \vec x = \vec y \\
+	\vec x \inner \vec y = - | \vec x | | \vec y | & \iff & \vec x = - \vec y 
+\end{eqnarray}
+
+\section{Properties of matrices}
+
+Matrix multiplication with another matrix is defined:
+\begin{eqnarray}
+	C & = & A B \\
+	c[i][k] & = & \summation{j} a[i][j] b[j][k]
+\end{eqnarray}
+and with a vector:
+\begin{eqnarray}
+	\vec y & = & A \vec x \\
+	y[i] & = & \summation{j} a[i][j] x[j]
+\end{eqnarray}
+
+Multiplication is not commutative.
+However, using the transpose:
+\begin{equation}
+	(AB)^T = B^T A^T
+\end{equation}
+and:
+\begin{equation}
+	A \vec x = \vec x A^T
+\end{equation}
+
+We define the transpose operator:
+\begin{equation}
+	B = A^T \iff \forall i \forall j \, b[j][i] = a[i][j]
+\end{equation}
+
+Note that:
+\begin{equation}
+	\vec x \inner (A \vec y) = \vec x A \inner \vec y \equiv \vec x A \vec y
+\end{equation}
+
+Special matrices:
+\begin{eqnarray}
+	A \identity & = & A \\
+	A \zeromatrix & = & \zeromatrix \\
+	A + \zeromatrix & = & A \\
+\end{eqnarray}
+similarly:
+\begin{eqnarray}
+	1 A & = & A \\
+	0 A & = & \zeromatrix \\
+	A + 0 & = & A \\
+\end{eqnarray}
+
+Define the identity, $\identity$:
+\begin{equation}
+	i[j][k] = \left \lbrace \begin{array}{lr}
+	1 & j = k \\
+	0 & j \ne k
+\end{array} \right .
+\end{equation}
+And the zero matrix:
+\begin{equation}
+	\forall i \forall j \, o[i][j]=0
+\end{equation}
+
+We define the inverse:
+\begin{equation}
+	C = A^{-1} B \rightarrow B = A C
+\end{equation}
+Therefore:
+\begin{equation}
+	A^{-1} A = \identity
+\end{equation}
+
+Properties of the inverse:
+\begin{equation}
+	(A B)^{-1} = B^{-1} A^{-1}
+\end{equation}
+
+Note that the inverse need not exist.
+
+\section{Summaries}
+
+\label{summary}
+
+Here we summarize the result of the two operators, addition and multiplication,
+between different types.
+
+Addtion:
+
+\begin{tabular}{|l|lll|}\hline
+	+ & $\scalarclass$ & $\vectorclass$ & $\matrixclass$ \\ \hline
+	$\scalarclass$ & $\scalarclass$ & $\vectorclass$ & $\matrixclass$ \\
+	$\vectorclass$ & & $\vectorclass$ & - \\
+	$\matrixclass$ & & & $\matrixclass$ \\\hline
+\end{tabular}
+
+Multiplication:
+
+\begin{tabular}{|l|lll|}\hline
+	& $\scalarclass$ & $\vectorclass$ & $\matrixclass$ \\ \hline
+	$\scalarclass$ & $\scalarclass$ & $\vectorclass$ & $\matrixclass$ \\
+	$\vectorclass$ & & $\scalarclass$/$\matrixclass^*$ & $\vectorclass$ \\
+	$\matrixclass$ & & $\vectorclass$ & $\matrixclass$ \\\hline
+\end{tabular}
+
+* inner/outer product.
+
+\section{Subscript domain}
+
+For both vectors and matrices, the subscripts for a given variable may only
+take on values within certain domains.
+In order for an operation between a pair of variable to be meaningful,
+these domains must be compatible.
+
+Consider matrix multiplication:
+\begin{equation}
+	A [\domain{m} \times \domain{n}] = B[\domain{m} \times \domain{k}] C [\domain{k} \times \domain{n}]
+\end{equation}
+where $\domain{m} \subset \subclass$, 
+$\domain{k} \subset \subclass$
+and $\domain{n} \subset \subclass$.
+Note that the inner domains of $B$ and $C$ must match and that $A$ takes on
+the outer domains of $B$ and $C$.
+
+Similarly, for matrix-vector multiplication:
+\begin{equation}
+	\vec y [\domain{m}] = A [\domain{m} \times \domain{n}] \vec x [\domain{n}]
+\end{equation}
+
+For most other operations, such as addition and the inner product, the
+domains of both operands must match exactly.
+For the outer product:
+\begin{equation}
+	A [\domain{m} \times \domain{n}] = \vec x [\domain{m}] \outer \vec y [\domain{n}]
+\end{equation}
+
+Lets revise the membership statements in both (\ref{vectormembership}) and
+(\ref{matrixmembership}) to include variable subscript domains:
+\begin{equation}
+	\vec v \in \vectorclass [\domain{n}]
+\end{equation}
+\begin{equation}
+	M \in \matrixclass [\domain{m} \times \domain{n}]
+\end{equation}
+
+\end{document}
+
