@@ -2,6 +2,7 @@
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{natbib}
 
 %type classes:
 %\newcommand{\subclass}{\mathfrak{\sigma}}
@@ -24,27 +25,43 @@
 
 \begin{document}
 
+\title{An abstract matrix algebra for generalized vector spaces}
+\author{Peter Mills}
+
+\maketitle
+
+\tableofcontents
+
 \section{Introduction}
 
 We are interested in a generalized abstract algebra describing matrix
-arithmetic.
+arithmetic and associated vector spaces.
 In particular, we are interested first, in an algebra that includes scalars,
 vectors and matrices as separate, but interoperable type sets as opposed to one
 that treats them as a single type (``tensor'') defined by rank; and second,
 one that unites both linear algebra and its continuum generalization
 defined over function spaces.
 
-Such an algebraic structure goes a good deal beyond simple rings and fields
+Such an algebraic structure goes a good deal beyond rings and fields
 in elementary abstract algebra because we are dealing with multiple sets
 with different conventions for the additive and multiplicative operators
 and with inter-operations between these sets.
-This makes for a very complicated algebraic structure.
+This makes for a complicated algebraic structure.
+
+The motivation for this algebra is found in \citet{Mills2015} in which 
+standard linear algebra is used to find approximate, discrete solutions to
+the problem of tracer transport.
+The continuum generalization to function spaces produces exact solutions.
+The work has applications beyond tracer transport as any
+classical system represented as a probability distribution will obey similar
+mathematics.
+
 
 \section{Symbols}
 
 Here we define the different symbols used in this summary.
-Symbols unique to a given type will be introduced in the discussion of that
-type.
+%Symbols unique to a given type will be introduced in the discussion of that
+%type.
 
 \subsection{Types}
 
@@ -72,7 +89,7 @@ Vectors:
 	\vec v \in \vectorclass
 	\label{vectormembership}
 \end{equation}
-Vectors are lower-case and will be further marked by the vector symbol.
+Vectors are also lower-case and will be further marked by the vector symbol.
 
 And matrices:
 \begin{equation}
@@ -83,25 +100,68 @@ Matrices are denoted by upper-case letters.
 
 \subsection{Operators}
 
+Equality:
+\begin{equation}
+	a=b
+\end{equation}
+defined over all type sets.
+
+Greater than/less than:
+\begin{eqnarray}
+	a & > & b \\
+	b & < & a
+\end{eqnarray}
+defined over scalars only.
+
 Addition:
 \begin{equation}
 	a = b+c
 \end{equation}
+Defined over scalars, vectors and matrices.
 
-Subtraction:
+Subtraction/negation:
 \begin{equation}
 	a = b - c
 \end{equation}
+Defined over scalars, vectors and matrices.
 
 Multiplication:
 \begin{equation}
 	a = b c
 \end{equation}
+Defined over scalars and matrices.
 
 Dot or inner product:
 \begin{equation}
 	a = \vec b \inner \vec c
 \end{equation}
+Defined over vectors only.
+
+Outer product:
+\begin{equation}
+	a = \vec b \outer \vec c
+\end{equation}
+Defined over vectors only.
+
+Division/inverse:
+\begin{eqnarray}
+	b & = & \frac{1}{a} \\
+	B & = & A^{-1}
+\end{eqnarray}
+Defined over scalars and matrices.
+
+Transpose:
+\begin{equation}
+	B = A^T
+\end{equation}
+Define over matrices only.
+
+Norm:
+\begin{equation}
+	d = | \vec v |
+\end{equation}
+The norm is defined over scalars and vectors and may also be defined over
+matrices.
 
 Subscript operator: we borrow square brackets from computer programming
 languages such as C for our subscript operator.
@@ -127,8 +187,10 @@ Likewise, to subscript the vector $\vec v$, we remove the vector symbol:
 
 Summation operator:
 \begin{equation}
-	\summation{i} v[i]
+	s=\summation{i} v[i]
 \end{equation}
+which returns a scalar.
+
 To understand where we're going here, this is meant to generalize both the 
 discrete summation operator:
 \begin{equation}
@@ -182,8 +244,8 @@ You can multiply a scalar with another scalar,
 a scalar with a vector, a scalar with a matrix, a 
 matrix with a vector and a matrix with another matrix but you cannot
 multiply a vector with another vector.
-Special multiplicative operators for vectors will be introduced in Section
-\ref{vectors}.
+The special multiplicative operators for vectors, inner- and outer-product
+($\inner$ and $\outer$ resp.), will be defined in Section \ref{vectors}.
 
 Similarly, you can add a scalar to any other type, a vector to another
 vector or a matrix to another matrix but you cannot add a vector to
@@ -420,22 +482,25 @@ Multiplication:
 
 For both vectors and matrices, the subscripts for a given variable may only
 take on values within certain domains.
-In order for an operation between a pair of variable to be meaningful,
-these domains must be compatible.
+Up until now we've assumed that the domain for all subscripts was the same.
+This need not be the case, however.
+
+In order for an operation between a pair of variables to be meaningful,
+the subscript domains must be compatible although not necessarily identical.
 
 Consider matrix multiplication:
 \begin{equation}
-	A [\domain{m} \times \domain{n}] = B[\domain{m} \times \domain{k}] C [\domain{k} \times \domain{n}]
+	A [\domain{m} \times \domain{n}] = B[\domain{m} \times \domain{k}] \, C [\domain{k} \times \domain{n}]
 \end{equation}
 where $\domain{m} \subset \subclass$, 
 $\domain{k} \subset \subclass$
 and $\domain{n} \subset \subclass$.
-Note that the inner domains of $B$ and $C$ must match and that $A$ takes on
-the outer domains of $B$ and $C$.
+Note that the inner domains of the multiplicands, $B$ and $C$, must match 
+and that the result, $A$, takes on the outer domains of $B$ and $C$.
 
 Similarly, for matrix-vector multiplication:
 \begin{equation}
-	\vec y [\domain{m}] = A [\domain{m} \times \domain{n}] \vec x [\domain{n}]
+	\vec y [\domain{m}] = A [\domain{m} \times \domain{n}] \, \vec x [\domain{n}]
 \end{equation}
 
 For most other operations, such as addition and the inner product, the
@@ -453,6 +518,9 @@ Lets revise the membership statements in both (\ref{vectormembership}) and
 \begin{equation}
 	M \in \matrixclass [\domain{m} \times \domain{n}]
 \end{equation}
+
+\bibliographystyle{apa}
+\bibliography{matrix.bib}
 
 \end{document}
 
